@@ -1,24 +1,70 @@
 "use client";
 // src/app/page.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [submitted, setSubmitted] = useState(false);
+  const [declined, setDeclined] = useState(false);
+  const router = useRouter();
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // Normally you would send this data to your backend here.
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const request = {
+      id: Date.now().toString(),
+      institution: data.get("institution"),
+      adminEmail: data.get("adminEmail"),
+      studentDomain: data.get("studentDomain"),
+      facultyDomain: data.get("facultyDomain"),
+      status: "pending",
+    } as any;
+    const existing = JSON.parse(localStorage.getItem("requests") || "[]");
+    existing.push(request);
+    localStorage.setItem("requests", JSON.stringify(existing));
+    localStorage.setItem("pendingRequestId", request.id);
     setSubmitted(true);
   }
+
+  useEffect(() => {
+    if (!submitted) return;
+    const id = localStorage.getItem("pendingRequestId");
+    if (!id) return;
+    const interval = setInterval(() => {
+      const stored = JSON.parse(localStorage.getItem("requests") || "[]");
+      const req = stored.find((r: any) => r.id === id);
+      if (req?.status === "approved") {
+        clearInterval(interval);
+        localStorage.removeItem("pendingRequestId");
+        router.push("/admin");
+      } else if (req?.status === "declined") {
+        clearInterval(interval);
+        localStorage.removeItem("pendingRequestId");
+        setDeclined(true);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [submitted, router]);
 
   if (submitted) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 space-y-4">
-        <h1 className="text-2xl font-bold">Thank you for registering!</h1>
-        <p>
-          Your information has been submitted and will be verified by the
-          OverYonder admin.
-        </p>
+        {declined ? (
+          <>
+            <h1 className="text-2xl font-bold text-red-600">Request Declined</h1>
+            <p>Your institution request was declined.</p>
+          </>
+        ) : (
+          <>
+            <h1 className="text-2xl font-bold">Thank you for registering!</h1>
+            <p>
+              Your information has been submitted and will be verified by the
+              OverYonder admin.
+            </p>
+            <p className="text-sm text-gray-600">This page will redirect once approved.</p>
+          </>
+        )}
       </div>
     );
   }
