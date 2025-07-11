@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 interface RequestRecord {
   id: string;
+  fullName: string;
   institution: string;
   adminEmail: string;
   studentDomain: string;

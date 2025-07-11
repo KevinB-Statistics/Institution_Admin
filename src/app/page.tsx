@@ -14,6 +14,7 @@ export default function Home() {
     const data = new FormData(form);
     const request = {
       id: Date.now().toString(),
+      fullName: data.get("fullName"),
       institution: data.get("institution"),
       adminEmail: data.get("adminEmail"),
       studentDomain: data.get("studentDomain"),
@@ -76,6 +77,17 @@ export default function Home() {
         className="space-y-4 bg-white shadow rounded p-6 max-w-md w-full"
       >
         <h1 className="text-2xl font-bold mb-2">Institution Onboarding</h1>
+        <div>
+          <label className="block mb-1 font-medium" htmlFor="fullName">
+            Full Name
+          </label>
+          <input
+            id="fullName"
+            type="text"
+            required
+            className="w-full border rounded p-2"
+          />
+        </div>
         <div>
           <label className="block mb-1 font-medium" htmlFor="institution">
             Institution Name

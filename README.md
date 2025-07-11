@@ -2,14 +2,16 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Institution Admin Onboarding
 
-When you visit the site you will be presented with a form to onboard your institution. 
-Provide your institution name, an admin email and the domains used for student and faculty email addresses. 
-Each domain has its own field. 
-After submitting the form your request will be reviewed by the OverYonder admin.
+When you visit the site you will be presented with a form to onboard your
+institution. Provide your **full name**, institution name, an admin email and
+the domains used for student and faculty email addresses. Each domain has its
+own field. After
+submitting the form your request will be reviewed by the OverYonder admin.
 
-The OverYonder admin can review these requests at `/oyadmin`. 
-From this page the admin may approve or decline each request, or click the Message button to email the requester. 
-When a request is approved the institution admin will be redirected automatically to `/admin`.
+The OverYonder admin can review these requests at `/oyadmin`. From this page the
+admin may approve or decline each request, or click the Message button to email
+the requester. When a request is approved the institution admin will be
+redirected automatically to `/admin`.
 
 ## Getting Started
 
