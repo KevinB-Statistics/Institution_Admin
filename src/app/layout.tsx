@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import WorkspaceSwitcher from "@/app/components/WorkspaceSwitcher";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +28,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header className="border-b p-4 flex justify-between items-center">
+          <a href="/" className="font-bold">
+            OverYonder
+          </a>
+          <WorkspaceSwitcher />
+        </header>
         {children}
       </body>
     </html>
