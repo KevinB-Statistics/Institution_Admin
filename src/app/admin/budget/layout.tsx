@@ -1,38 +1,20 @@
-import React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+// Back in src/app/admin/budget/layout.tsx
+import { Metadata } from "next";
+import BudgetNav from "@/components/BudgetNav";
 
-export default function BudgetLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
+export const metadata: Metadata = {
+  title: "Budget – Institution Admin",
+};
+
+export default function BudgetLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div>
-      <nav className="flex flex-col gap-1 mt-1 ml-4 text-sm">
-        <Link
-          href="/admin/budget"
-          className={`rounded px-2 py-1 hover:bg-gray-100 ${
-            pathname === "/admin/budget" ? "bg-blue-50 font-medium text-blue-700" : ""
-          }`}
-        >
-          Funding Requests
-        </Link>
-        <Link
-          href="/admin/budget/allocations"
-          className={`rounded px-2 py-1 hover:bg-gray-100 ${
-            pathname === "/admin/budget/allocations" ? "bg-blue-50 font-medium text-blue-700" : ""
-          }`}
-        >
-          Allocations
-        </Link>
-        <Link
-          href="/admin/budget/ledger"
-          className={`rounded px-2 py-1 hover:bg-gray-100 ${
-            pathname === "/admin/budget/ledger" ? "bg-blue-50 font-medium text-blue-700" : ""
-          }`}
-        >
-          Ledger
-        </Link>
-      </nav>
-      <div className="mt-4">{children}</div>
-    </div>
+    <section className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen space-y-6">
+      <BudgetNav />
+      {children}
+    </section>
   );
 }
