@@ -263,7 +263,7 @@ export default function AdminDashboard() {
           <div className="fixed z-50 top-24 left-1/2 w-full max-w-md -translate-x-1/2 rounded-xl bg-white dark:bg-gray-900 p-4 shadow-xl">
             <div className="flex items-center gap-2">
               <Combobox.Input
-                placeholder="Search widgets..."
+                placeholder="Search cards..."
                 className="w-full rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
                 onChange={e => setQuery(e.target.value)}
               />
