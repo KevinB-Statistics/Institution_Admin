@@ -14,6 +14,8 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import CompactCalendar from "./CompactCalendar";
+import { listAllEvents, EventRecord } from "@/lib/adminApi";
 import { Combobox } from "@headlessui/react";
 import Tippy from "@tippyjs/react";
 import {
@@ -142,6 +144,7 @@ function SortableCard(
     card: CardConfig;
     isPinned: boolean;
     onTogglePin: () => void;
+     events: EventRecord[];
   }
 ) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: props.card.id });
@@ -152,7 +155,7 @@ function SortableCard(
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <DashboardCard {...props} />
+      <DashboardCard {...props} events={props.events} />
     </div>
   );
 }
@@ -165,6 +168,7 @@ export default function AdminDashboard() {
   const [notifCount, setNotifCount] = useState(3);
   const [query, setQuery] = useState("");
   const [showCmd, setShowCmd] = useState(false);
+  const [events, setEvents] = useState<EventRecord[]>([]);
 
   // Initialize state from localStorage
   useEffect(() => {
@@ -181,6 +185,11 @@ export default function AdminDashboard() {
     );
     // Simulate fetch delay for skeleton
     setTimeout(() => setLoading(false), 300);
+  }, []);
+
+    // Fetch events for calendar card
+  useEffect(() => {
+    listAllEvents().then(setEvents);
   }, []);
 
   if (loading) {
@@ -312,7 +321,7 @@ export default function AdminDashboard() {
               <h2 className="w-full mb-2 text-lg font-semibold text-slate-900 dark:text-slate-100">Favorites</h2>
               <div className="flex flex-wrap gap-4 mb-4">
                 {pinnedCards.map(card => (
-                  <DashboardCard key={card.id} card={card} isPinned={true} onTogglePin={() => togglePin(card.id)} />
+                   <DashboardCard key={card.id} card={card} isPinned={true} onTogglePin={() => togglePin(card.id)} events={events} />
                 ))}
               </div>
               <h2 className="w-full mb-2 text-lg font-semibold text-slate-900 dark:text-slate-100">All</h2>
@@ -320,7 +329,7 @@ export default function AdminDashboard() {
           )}
           <div className="flex flex-wrap gap-4">
             {otherCards.map(card => (
-              <SortableCard key={card.id} card={card} isPinned={false} onTogglePin={() => togglePin(card.id)} />
+              <SortableCard key={card.id} card={card} isPinned={false} onTogglePin={() => togglePin(card.id)} events={events} />
             ))}
           </div>
         </SortableContext>
@@ -330,7 +339,7 @@ export default function AdminDashboard() {
 }
 
 // Basic DashboardCard that supports inline edit and sparklines
-function DashboardCard({ card, isPinned, onTogglePin }: { card: CardConfig; isPinned: boolean; onTogglePin: () => void; }) {
+function DashboardCard({ card, isPinned, onTogglePin, events }: { card: CardConfig; isPinned: boolean; onTogglePin: () => void; events: EventRecord[] }) {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(card.summary);
   const router = useRouter();
@@ -387,6 +396,7 @@ function DashboardCard({ card, isPinned, onTogglePin }: { card: CardConfig; isPi
           </ResponsiveContainer>
         </div>
       )}
+      {card.id === "calendar" && events && <CompactCalendar events={events} />}
       <Tippy content="Quick create">
         <Link
           href={card.href}
