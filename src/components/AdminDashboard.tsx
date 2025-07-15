@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from "react";
 import NotificationsButton from "./NotificationsButton";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 import {
@@ -281,10 +282,18 @@ export default function AdminDashboard() {
 function DashboardCard({ card, isPinned, onTogglePin }: { card: CardConfig; isPinned: boolean; onTogglePin: () => void; }) {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(card.summary);
-
+  const router = useRouter();
   return (
-    <div className="relative w-60 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow hover:shadow-lg transition">
-      <button onClick={onTogglePin} className="absolute top-2 right-2 text-gray-400 hover:text-yellow-500">
+    <div
+      onDoubleClick={() => router.push(card.href)}
+      className="relative w-60 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow hover:shadow-lg transition cursor-pointer"
+    >
+      <button
+        onClick={e => {
+          e.stopPropagation();
+          onTogglePin();
+        }}
+        className="absolute top-2 right-2 text-gray-400 hover:text-yellow-500 z-20">
         {isPinned ? <StarOnIcon /> : <StarOffIcon />}
       </button>
       {(() => {
@@ -293,10 +302,25 @@ function DashboardCard({ card, isPinned, onTogglePin }: { card: CardConfig; isPi
       })()}
       <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">{card.title}</h3>
       {editing ? (
-        <textarea value={text} onChange={e => setText(e.target.value)} onBlur={() => setEditing(false)} className="w-full p-1 border rounded bg-gray-100 dark:bg-gray-700" />
+         <textarea
+          onClick={e => e.stopPropagation()}
+          value={text}
+          onChange={e => setText(e.target.value)}
+          onBlur={() => setEditing(false)}
+          className="w-full p-1 border rounded bg-gray-100 dark:bg-gray-700"
+        />
       ) : (
-        <p onDoubleClick={() => setEditing(true)} className="text-sm text-gray-500 dark:text-gray-400">
-          {text} <EditIcon className="inline-block w-4 h-4 text-gray-400 hover:text-gray-600" />
+         <p className="text-sm text-gray-500 dark:text-gray-400">
+          {text}{" "}
+          <button
+            onClick={e => {
+              e.stopPropagation();
+              setEditing(true);
+            }}
+            className="inline-flex items-center"
+          >
+            <EditIcon className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+          </button>
         </p>
       )}
       {card.sparkData && (
@@ -309,7 +333,11 @@ function DashboardCard({ card, isPinned, onTogglePin }: { card: CardConfig; isPi
         </div>
       )}
       <Tippy content="Quick create">
-        <Link href={card.href} className="absolute bottom-2 right-2 text-blue-600 hover:text-blue-800">
+        <Link
+          href={card.href}
+          onClick={e => e.stopPropagation()}
+          className="absolute bottom-2 right-2 text-blue-600 hover:text-blue-800 z-20"
+        >
           <AddIcon />
         </Link>
       </Tippy>
