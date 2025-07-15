@@ -233,7 +233,7 @@ export default function AdminDashboard() {
       {/* Toolbar */}
       <div className="flex items-center justify-between mb-6 gap-4">
         <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 flex-1">Dashboard</h1>
-        <button onClick={() => setShowCmd(true)} className="px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow">Ctrl+K</button>
+        <button onClick={() => setShowCmd(true)} className="px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow">Search</button>
         <Tippy content="Notifications">
           <button className="relative p-2 bg-white dark:bg-gray-800 rounded-full shadow">
             <BellIcon />
@@ -244,16 +244,54 @@ export default function AdminDashboard() {
 
       {/* Command Palette */}
       {showCmd && (
-        <Combobox as="div" onChange={(item: any) => window.location.href = item.href} value="" nullable>
-          <div className="fixed inset-0 bg-black bg-opacity-30" onClick={() => setShowCmd(false)} />
-          <div className="fixed top-1/3 left-1/2 transform -translate-x-1/2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
-            <Combobox.Input placeholder="Type to jump..." className="w-full px-3 py-2 border rounded" onChange={e => setQuery(e.target.value)} />
-            <Combobox.Options className="mt-2 max-h-60 overflow-auto">
-              {filtered.map(item => (
-                <Combobox.Option key={item.id} value={item} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
-                  {item.title}
-                </Combobox.Option>
-              ))}
+         <Combobox
+          as="div"
+          onChange={(item: any) => {
+            setShowCmd(false)
+            window.location.href = item.href
+          }}
+          value=""
+          nullable
+        >
+          <div
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+            onClick={() => {
+              setShowCmd(false)
+              setQuery("")
+            }}
+          />
+          <div className="fixed z-50 top-24 left-1/2 w-full max-w-md -translate-x-1/2 rounded-xl bg-white dark:bg-gray-900 p-4 shadow-xl">
+            <div className="flex items-center gap-2">
+              <Combobox.Input
+                placeholder="Search widgets..."
+                className="w-full rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                onChange={e => setQuery(e.target.value)}
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  aria-label="Clear search"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+            <Combobox.Options className="mt-3 max-h-60 overflow-auto rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+              {filtered.length > 0 ? (
+                filtered.map(item => (
+                  <Combobox.Option
+                    key={item.id}
+                    value={item}
+                    className="cursor-pointer p-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    {item.title}
+                  </Combobox.Option>
+                ))
+              ) : (
+                <div className="p-3 text-center text-sm text-gray-500">No results</div>
+              )}
             </Combobox.Options>
           </div>
         </Combobox>
