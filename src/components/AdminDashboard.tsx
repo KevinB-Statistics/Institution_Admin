@@ -289,11 +289,15 @@ function DashboardCard({ card, isPinned, onTogglePin }: { card: CardConfig; isPi
       className="relative w-60 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow hover:shadow-lg transition cursor-pointer"
     >
       <button
+        onPointerDown={e => e.stopPropagation()}
+        onDoubleClick={e => e.stopPropagation()}
         onClick={e => {
           e.stopPropagation();
           onTogglePin();
         }}
-        className="absolute top-2 right-2 text-gray-400 hover:text-yellow-500 z-20">
+        className="absolute top-2 right-2 text-gray-400 hover:text-yellow-500 z-20"
+        aria-label={isPinned ? "Unpin card" : "Pin card"}
+        >
         {isPinned ? <StarOnIcon /> : <StarOffIcon />}
       </button>
       {(() => {
