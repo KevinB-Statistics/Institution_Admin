@@ -287,7 +287,10 @@ function DashboardCard({ card, isPinned, onTogglePin }: { card: CardConfig; isPi
       <button onClick={onTogglePin} className="absolute top-2 right-2 text-gray-400 hover:text-yellow-500">
         {isPinned ? <StarOnIcon /> : <StarOffIcon />}
       </button>
-      <card.Icon className="w-6 h-6 text-blue-600 mb-2" />
+      {(() => {
+        const Icon = card.Icon;
+        return <Icon className="w-6 h-6 text-blue-600 mb-2" />;
+      })()}
       <h3 className="font-semibold mb-1 text-slate-900 dark:text-slate-100">{card.title}</h3>
       {editing ? (
         <textarea value={text} onChange={e => setText(e.target.value)} onBlur={() => setEditing(false)} className="w-full p-1 border rounded bg-gray-100 dark:bg-gray-700" />
