@@ -196,6 +196,8 @@ export default function AdminDashboard() {
   const filtered = cards
     .filter(c => visible.includes(c.id))
     .filter(c => c.title.toLowerCase().includes(query.toLowerCase()));
+  const pinnedCards = filtered.filter(c => pinned.includes(c.id));
+  const otherCards = filtered.filter(c => !pinned.includes(c.id));
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -266,10 +268,21 @@ export default function AdminDashboard() {
 
       {/* Drag-and-Drop Cards */}
       <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-        <SortableContext items={filtered.map(f => f.id)} strategy={verticalListSortingStrategy}>
+        <SortableContext items={otherCards.map(f => f.id)} strategy={verticalListSortingStrategy}>
+          {pinnedCards.length > 0 && (
+            <>
+              <h2 className="w-full mb-2 text-lg font-semibold text-slate-900 dark:text-slate-100">Favorites</h2>
+              <div className="flex flex-wrap gap-4 mb-4">
+                {pinnedCards.map(card => (
+                  <DashboardCard key={card.id} card={card} isPinned={true} onTogglePin={() => togglePin(card.id)} />
+                ))}
+              </div>
+              <h2 className="w-full mb-2 text-lg font-semibold text-slate-900 dark:text-slate-100">All</h2>
+            </>
+          )}
           <div className="flex flex-wrap gap-4">
-            {filtered.map(card => (
-              <SortableCard key={card.id} card={card} isPinned={pinned.includes(card.id)} onTogglePin={() => togglePin(card.id)} />
+            {otherCards.map(card => (
+              <SortableCard key={card.id} card={card} isPinned={false} onTogglePin={() => togglePin(card.id)} />
             ))}
           </div>
         </SortableContext>
