@@ -4,6 +4,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Menu, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface NavItem {
   label: string;
@@ -70,60 +71,117 @@ export default function AdminSidebar() {
   const toggleSection = (label: string) =>
     setOpen((o) => ({ ...o, [label]: !o[label] }));
 
-  return (
+    return (
     <aside
-      className={`bg-gray-100 border-r p-2 text-sm transition-all ${
-        collapsed ? "w-12" : "w-56"
-      }`}
+      className={`
+        bg-white border-r shadow-sm
+        transition-all duration-200 ease-in-out
+        ${collapsed ? "w-14" : "w-56"}
+      `}
     >
-      {/* Collapse/expand button */}
+      {/* collapse/expand: icon left-justified with custom tooltip */}
       <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="mb-2 w-full text-left"
+        onClick={() => setCollapsed((c) => !c)}
+        className="
+          mb-4 flex items-center justify-start
+          w-full px-2 h-10
+          relative
+          rounded hover:bg-gray-100 focus:outline-none focus:ring
+          group
+        "
       >
-        {collapsed ? "▶ Menu" : "◀ Menu"}
+        <div className="relative w-6 h-6">
+          <ChevronLeft
+            className={`
+              absolute top-0 left-0 w-6 h-6
+              transition-opacity duration-200
+              ${collapsed ? "opacity-0" : "opacity-100"}
+            `}
+          />
+          <Menu
+            className={`
+              absolute top-0 left-0 w-6 h-6
+              transition-opacity duration-200
+              ${collapsed ? "opacity-100" : "opacity-0"}
+            `}
+          />
+        </div>
+        <span
+          className={`
+            absolute left-10 top-1/2 -translate-y-1/2
+            whitespace-nowrap px-2 py-1
+            bg-black text-white text-xs
+            rounded-md
+            opacity-0 group-hover:opacity-100
+            transition-opacity duration-200
+          `}
+        >
+          {collapsed ? "Open sidebar" : "Close sidebar"}
+        </span>
       </button>
 
       {!collapsed && (
-        <nav className="space-y-2">
+        <nav className="space-y-1 px-2">
           {NAV.map((item) => (
             <div key={item.label}>
               {item.sub ? (
                 <button
                   onClick={() => toggleSection(item.label)}
-                  className="flex w-full items-center justify-between rounded px-2 py-1 hover:bg-gray-200"
+                  aria-expanded={open[item.label]}
+                  className="
+                    flex items-center justify-between
+                    w-full px-3 py-2
+                    rounded-lg
+                    text-gray-700 hover:bg-gray-100
+                    focus:outline-none focus:bg-gray-100
+                  "
                 >
                   <span
-                    className={
-                      pathname.startsWith(item.href) ? "font-semibold" : ""
-                    }
+                    className={`flex-1 text-left ${
+                      pathname.startsWith(item.href)
+                        ? "font-semibold text-gray-900"
+                        : ""
+                    }`}
                   >
                     {item.label}
                   </span>
-                  <span>{open[item.label] ? "▼" : "▶"}</span>
+                  <ChevronRight
+                    className={`
+                      w-4 h-4
+                      text-gray-500
+                      transition-transform duration-200
+                      ${open[item.label] ? "rotate-90" : ""}
+                    `}
+                  />
                 </button>
               ) : (
                 <Link
                   href={item.href}
-                  className={`block rounded px-2 py-1 hover:bg-gray-200 ${
-                    pathname === item.href ? "font-semibold bg-blue-50" : ""
-                  }`}
+                  className={`
+                    block px-3 py-2 rounded-lg
+                    text-gray-700 hover:bg-gray-100
+                    ${pathname === item.href
+                      ? "font-semibold bg-blue-50 text-blue-700"
+                      : ""}
+                  `}
                 >
                   {item.label}
                 </Link>
               )}
 
               {item.sub && open[item.label] && (
-                <div className="ml-4 mt-1 flex flex-col gap-1 text-sm">
+                <div className="mt-1 space-y-1 pl-6">
                   {item.sub.map((sub) => (
                     <Link
                       key={sub.href}
                       href={sub.href}
-                      className={`block rounded px-2 py-1 hover:bg-gray-100 ${
-                        pathname === sub.href
+                      className={`
+                        block px-3 py-1 rounded-lg text-sm
+                        text-gray-600 hover:bg-gray-50
+                        ${pathname === sub.href
                           ? "font-medium text-blue-700 bg-blue-50"
-                          : ""
-                      }`}
+                          : ""}
+                      `}
                     >
                       {sub.label}
                     </Link>
@@ -137,3 +195,4 @@ export default function AdminSidebar() {
     </aside>
   );
 }
+
