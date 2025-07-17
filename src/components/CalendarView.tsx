@@ -21,6 +21,14 @@ export default function CalendarView({ events }: { events: EventRecord[] }) {
       }, {}),
     [events]
   );
+  const eventsByMonth = useMemo(() => {
+    return events.reduce<Record<string, number>>((acc, ev) => {
+      const d = new Date(ev.date)
+      const key = `${d.getFullYear()}-${d.getMonth()}`
+      acc[key] = (acc[key] || 0) + 1
+      return acc
+    }, {})
+  }, [events])
 
   const formatMonthYear = (d: Date) =>
     d.toLocaleDateString(undefined, { month: "long", year: "numeric" });
@@ -40,6 +48,39 @@ export default function CalendarView({ events }: { events: EventRecord[] }) {
     return copy;
   };
 
+  const renderSidebar = () => {
+    if (!selectedDate) return null
+    const dayEvents = eventsByDate[selectedDate] ?? []
+    return (
+      <aside className="w-64 h-full bg-white border-l p-4 overflow-auto">
+        <header className="flex justify-between items-center mb-4">
+          <h3 className="font-semibold text-base">
+            {new Date(selectedDate).toLocaleDateString(undefined, {
+              weekday: 'long',
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric'
+            })}
+          </h3>
+          <button
+            onClick={() => setSelectedDate(null)}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            ✕
+          </button>
+        </header>
+        <ul className="space-y-2 text-sm">
+          {dayEvents.map(e => (
+            <li key={e.id} className="p-2 border-b">
+              <h4 className="font-medium">{e.title}</h4>
+              <p className="text-xs text-gray-600 mt-1">{e.description}</p>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )
+  }
+
   const renderWeek = () => {
     const start = startOfWeek(current);
     const hours = Array.from({ length: 24 }, (_, h) => h);
@@ -50,42 +91,51 @@ export default function CalendarView({ events }: { events: EventRecord[] }) {
     });
 
     return (
-      <div className="flex-1 overflow-auto bg-white shadow-sm rounded">
-        <div className="grid grid-cols-8 sticky top-0 bg-white z-10 border-b">
-          <div className="h-8" />
-          {days.map((day) => (
-            <div key={day.toISOString()} className="py-1 text-center font-medium text-sm">
-              {day.toLocaleDateString(undefined, { weekday: "short", day: "numeric" })}
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-8">
-          {hours.map((hour) => (
-            <Fragment key={hour}>
-              <div className="py-1 px-1 text-xs text-gray-500 border-r">
-                {`${hour.toString().padStart(2, "0")}:00`}
+      <div className="flex-1 flex">
+        <div className="flex-1 overflow-auto bg-white shadow-sm rounded">
+          <div className="grid grid-cols-8 sticky top-0 bg-white z-10 border-b">
+            <div className="h-8" />
+            {days.map((day) => (
+              <div key={day.toISOString()} className="py-1 text-center font-medium text-sm">
+                {day.toLocaleDateString(undefined, { weekday: "short", day: "numeric" })}
               </div>
-              {days.map((day) => {
-                const key = day.toISOString().slice(0, 10);
-                const evs = eventsByDate[key] ?? [];
-                return (
-                  <div
-                    key={`${key}-${hour}`}
-                    className="h-12 border-b border-r hover:bg-gray-50 p-0.5"
-                  >
-                    {hour === 0 && (
-                      <ul className="text-xxs space-y-1">
-                        {evs.map((e) => (
-                          <li key={e.id} className="truncate">• {e.title}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                );
-              })}
-            </Fragment>
-          ))}
+              ))}
+          </div>
+          <div className="grid grid-cols-8">
+            {hours.map((hour) => (
+              <Fragment key={hour}>
+                <div className="py-1 px-1 text-xs text-gray-500 border-r">
+                  {`${hour.toString().padStart(2, "0")}:00`}
+                </div>
+                {days.map((day) => {
+                  const key = day.toISOString().slice(0, 10);
+                  const evs = eventsByDate[key] ?? [];
+                  return (
+                    <div
+                      key={`${key}-${hour}`}
+                      className="h-12 border-b border-r hover:bg-gray-50 p-0.5"
+                    >
+                      {hour === 0 && (
+                        <ul className="text-xxs space-y-1">
+                          {evs.map((e) => (
+                            <li
+                              key={e.id}
+                              className="truncate cursor-pointer hover:underline"
+                              onClick={() => setSelectedDate(key)}
+                            >
+                              • {e.title}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  );
+                })}
+              </Fragment>
+            ))}
+          </div>
         </div>
+        {renderSidebar()}
       </div>
     );
   };
@@ -121,7 +171,7 @@ export default function CalendarView({ events }: { events: EventRecord[] }) {
         );
       });
       weeks.push(
-        <div key={w} className="grid grid-cols-7 gap-px">
+        <div key={w} className="grid grid-cols-7 gap-px flex-1">
           {days}
         </div>
       );
@@ -135,27 +185,11 @@ export default function CalendarView({ events }: { events: EventRecord[] }) {
               <div key={d} className="py-2 text-center">{d}</div>
             ))}
           </div>
-          <div className="flex-1 overflow-auto">
-            <div className="space-y-px">
-              {weeks}
-            </div>
+           <div className="flex-1 overflow-auto grid grid-rows-6 gap-px">
+            {weeks}
           </div>
         </div>
-        {selectedDate && (
-          <aside className="w-64 h-full bg-white border-l p-4 overflow-auto">
-            <header className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold text-base">
-                {new Date(selectedDate).toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric', year:'numeric' })}
-              </h3>
-              <button onClick={() => setSelectedDate(null)} className="text-gray-500 hover:text-gray-700">✕</button>
-            </header>
-            <ul className="space-y-2 text-sm">
-              {(eventsByDate[selectedDate] ?? []).map(e => (
-                <li key={e.id} className="p-2 border-b">{e.title}</li>
-              ))}
-            </ul>
-          </aside>
-        )}
+        {renderSidebar()}
       </div>
     );
   };
@@ -163,13 +197,19 @@ export default function CalendarView({ events }: { events: EventRecord[] }) {
   const renderYear = () => {
     const year = current.getFullYear();
     return (
-      <div role="grid" aria-label="Year view" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+      <div role="grid" aria-label="Year view" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2">
         {Array.from({ length: 12 }, (_, m) => {
           const date = new Date(year, m, 1);
-          const key = date.toISOString().slice(0, 10);
-          const count = (eventsByDate[key] ?? []).length;
+          const count = eventsByMonth[`${year}-${m}`] ?? 0;
           return (
-            <article key={m} className="flex flex-col items-center justify-center rounded-lg border p-2 bg-white hover:shadow-sm text-sm">
+            <article
+              key={m}
+              onClick={() => {
+                setCurrent(date);
+                setView('month');
+              }}
+              className="cursor-pointer flex flex-col items-center justify-center rounded-lg border p-4 bg-white hover:shadow-sm text-sm aspect-square"
+            >
               <header className="font-semibold">{date.toLocaleDateString(undefined, { month: 'short' })}</header>
               <span className="text-gray-500">{count} events</span>
             </article>
