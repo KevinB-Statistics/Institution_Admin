@@ -53,76 +53,86 @@ export default function EventsExplorer({ events }: { events: EventRecord[] }) {
     <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
       {/* ─── Tabs & Toolbar ───────────────────────────────────── */}
       <Tab.Group
-        selectedIndex={TABS.indexOf(selectedTab)}
-        onChange={i => setSelectedTab(TABS[i])}
-      >
-        {/* Tabs */}
-        <Tab.List className="inline-flex overflow-hidden rounded-lg bg-white border">
-          {TABS.map(tab => (
-            <Tab as={Fragment} key={tab}>
-              {({ selected }) => (
-                <button
-                  className={`px-4 py-2 text-sm font-medium transition ${
-                    selected
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
-                  }`}
-                >
-                  {tab}
-                </button>
-              )}
-            </Tab>
-          ))}
-        </Tab.List>
-
-        {/* Toolbar */}
-        <div className="mt-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div className="flex items-center gap-2">
-            {/* Search */}
-            <input
-              type="text"
-              placeholder="Search events..."
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              className="border border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-500"
-            />
-
-            {/* Sort */}
-            <select
-              value={sortKey}
-              onChange={e => setSortKey(e.target.value as SortKey)}
-              className="border border-gray-300 rounded-xl px-3 py-2 shadow-sm"
+  selectedIndex={TABS.indexOf(selectedTab)}
+  onChange={i => setSelectedTab(TABS[i])}
+>
+  <div className="flex flex-wrap items-center justify-between gap-4">
+    {/* Tabs */}
+    <Tab.List className="inline-flex overflow-hidden rounded-lg bg-white border">
+      {TABS.map(tab => (
+        <Tab as={Fragment} key={tab}>
+          {({ selected }) => (
+            <button
+              className={`px-4 py-2 text-sm font-medium transition ${
+                selected
+                  ? "bg-blue-600 text-white"
+                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              }`}
             >
-              <option value="date">Sort by Date</option>
-              <option value="title">Sort by Title</option>
-            </select>
-          </div>
+              {tab}
+            </button>
+          )}
+        </Tab>
+      ))}
+    </Tab.List>
 
-          {/* View Mode Toggle */}
-          <div className="inline-flex overflow-hidden rounded-full border bg-white">
-            {(Object.keys(MODE_CONFIG) as ViewMode[]).map(m => {
-              const { label, Icon } = MODE_CONFIG[m]
-              const active = mode === m
-              return (
-                <button
-                  key={m}
-                  onClick={() => setMode(m)}
-                  className={`
-                    flex items-center gap-1 px-4 py-2 text-sm font-medium transition
-                    ${active
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"}
-                  `}
-                  aria-label={label}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span className="hidden sm:inline">{label}</span>
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      </Tab.Group>
+    {/* Right Controls: View Modes + Plus Button */}
+    <div className="flex items-center gap-2 flex-wrap">
+      {/* View Mode Toggle */}
+      <div className="inline-flex overflow-hidden rounded-full border bg-white">
+        {(Object.keys(MODE_CONFIG) as ViewMode[]).map(m => {
+          const { label, Icon } = MODE_CONFIG[m]
+          const active = mode === m
+          return (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              className={`flex items-center gap-1 px-4 py-2 text-sm font-medium transition ${
+                active
+                  ? "bg-blue-600 text-white"
+                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              }`}
+              aria-label={label}
+            >
+              <Icon className="w-4 h-4" />
+              <span className="hidden sm:inline">{label}</span>
+            </button>
+          )
+        })}
+      </div>
+
+      {/* Plus Button */}
+      <Link
+        href="/admin/events/create"
+        className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow"
+        aria-label="Create new event"
+      >
+        +
+      </Link>
+    </div>
+  </div>
+
+  {/* Search + Sort remains below */}
+  <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="flex items-center gap-2">
+      <input
+        type="text"
+        placeholder="Search events..."
+        value={query}
+        onChange={e => setQuery(e.target.value)}
+        className="border border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-500"
+      />
+      <select
+        value={sortKey}
+        onChange={e => setSortKey(e.target.value as SortKey)}
+        className="border border-gray-300 rounded-xl px-3 py-2 shadow-sm"
+      >
+        <option value="date">Sort by Date</option>
+        <option value="title">Sort by Title</option>
+      </select>
+    </div>
+  </div>
+</Tab.Group>
 
       {/* ─── Content ─────────────────────────────────────────── */}
       {mode === "cards"   && <CardView    events={filtered} />}
