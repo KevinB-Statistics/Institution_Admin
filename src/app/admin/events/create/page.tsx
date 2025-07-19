@@ -65,7 +65,7 @@ export default function CreateEventPage() {
     <div className="bg-gray-100 flex items-start justify-center p-2">
        <div className="w-full max-w-7xl bg-white rounded-xl shadow-lg">
         {/* Header */}
-        <div className="p-5">
+        <div className="p-4">
           <h1 className="text-2xl font-semibold text-center mb-1">Create New Event</h1>
           <p className="text-center text-sm text-gray-500 mb-2">
             Step {step} of {steps.length}: {steps[step - 1]}
@@ -73,11 +73,11 @@ export default function CreateEventPage() {
 
           {/* Step 1 */}
           {step === 1 && (
-            <form onSubmit={handleNext} className="grid grid-cols-12 gap-6">
+            <form onSubmit={handleNext} className="grid grid-cols-12 gap-4">
               {/* Image Upload */}
               <div className="col-span-5 space-y-2">
                 <label className="block text-sm font-medium">Event Image</label>
-                <div className="relative w-full aspect-square border-2 rounded-lg overflow-hidden cursor-pointer border-dashed border-gray-300 hover:border-blue-400 transition-colors">
+                <div className="relative w-full aspect-video border-2 rounded-lg overflow-hidden cursor-pointer border-dashed border-gray-300 hover:border-blue-400 transition-colors">
                   {imageFile ? (
                     <>
                       <img
@@ -98,7 +98,7 @@ export default function CreateEventPage() {
               </div>
 
               {/* Fields */}
-              <div className="col-span-7 space-y-4">
+              <div className="col-span-7 space-y-3">
                 {/* Category */}
                 <div>
                   <label className="block text-sm font-medium mb-1">Category</label>
@@ -143,7 +143,7 @@ export default function CreateEventPage() {
               {/* Google Map Picker */}
               <div>
                 <label className="block text-sm font-medium mb-1">Location</label>
-                <GoogleMap mapContainerStyle={{ width: '100%', height: '300px' }} center={location} zoom={17} onClick={e => {
+                <GoogleMap mapContainerStyle={{ width: '100%', height: '240px' }} center={location} zoom={17} onClick={e => {
                     const ll = e.latLng
                     if (ll) setLocation({ lat: ll.lat(), lng: ll.lng() })
                   }}>
