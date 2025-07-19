@@ -15,7 +15,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import CompactCalendar from "./CompactCalendar";
-import { listAllEvents, EventRecord } from "@/lib/adminApi";
+import type { EventRecord } from "@/lib/types";
 import { Combobox } from "@headlessui/react";
 import Tippy from "@tippyjs/react";
 import {
@@ -189,7 +189,9 @@ export default function AdminDashboard() {
 
     // Fetch events for calendar card
   useEffect(() => {
-    listAllEvents().then(setEvents);
+    fetch("/api/events")
+      .then((res) => res.json())
+      .then(setEvents);
   }, []);
 
   if (loading) {

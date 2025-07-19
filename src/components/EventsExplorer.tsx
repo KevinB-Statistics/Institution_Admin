@@ -4,7 +4,7 @@
 import React, { useState, Fragment } from "react"
 import { Tab } from "@headlessui/react"
 import Link from "next/link"
-import { EventRecord } from "@/lib/adminApi"
+import type { EventRecord } from "@/lib/types"
 import { Grid, List, Menu } from "lucide-react"
 
 type ViewMode = "cards" | "list" | "compact"

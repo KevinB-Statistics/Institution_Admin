@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import { listPendingEvents, EventRecord } from "@/lib/adminApi"
+import { listPendingEvents } from "@/lib/adminApi"
+import type { EventRecord } from "@/lib/types"
 
 export const metadata: Metadata = {
   title: "Pending Events – Institution Admin",

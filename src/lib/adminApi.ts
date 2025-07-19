@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
+import type { EventRecord } from './types'
 
 /**
  * Path to the local JSON database file. The file is stored alongside this
@@ -9,24 +10,7 @@ import path from 'path'
  */
 const DB_PATH = path.join(process.cwd(), 'events.json')
 
-export interface EventRecord {
-  id: string
-  title: string
-  date: string
-  status: 'approved' | 'pending' | 'rejected' | 'template'
-  organizer: string
-  description: string
-  category?: string
-  tags?: string[]
-  visibility?: string
-  selectedClub?: string
-  selectedGroup?: string
-  location?: { lat: number; lng: number }
-  start?: string
-  end?: string
-  rrule?: string
-  timezone?: string
-}
+
 
 /**
  * Read all events from the JSON database. If the file does not exist or
@@ -90,4 +74,27 @@ export async function createEvent(event: Omit<EventRecord, 'id'>): Promise<Event
   events.push(newEvent)
   await writeEvents(events)
   return newEvent
+
+}
+export async function getEvent(id: string): Promise<EventRecord | undefined> {
+  const events = await readEvents()
+  return events.find(e => e.id === id)
+}
+
+export async function updateEvent(id: string, data: Partial<EventRecord>): Promise<EventRecord | null> {
+  const events = await readEvents()
+  const index = events.findIndex(e => e.id === id)
+  if (index === -1) return null
+  events[index] = { ...events[index], ...data, id }
+  await writeEvents(events)
+  return events[index]
+}
+
+export async function deleteEvent(id: string): Promise<boolean> {
+  const events = await readEvents()
+  const index = events.findIndex(e => e.id === id)
+  if (index === -1) return false
+  events.splice(index, 1)
+  await writeEvents(events)
+  return true
 }

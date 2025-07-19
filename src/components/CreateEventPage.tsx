@@ -125,14 +125,17 @@ export default function ImprovedCreateEventPage() {
     }
   }
 
-  // Submission handler: In a production app this would persist the event to an
-  // API or database. For now, we simply log the payload and clear the draft.
-  const onSubmit = (data: FormValues) => {
+   // Submission handler: persist the new event via the API then clear draft
+  const onSubmit = async (data: FormValues) => {
     const rruleString = buildRecurrenceRule(data)
-    const event = { ...data, rrule: rruleString, timezone: tz }
-    console.log("submit", event)
+    const payload = { ...data, rrule: rruleString, timezone: tz }
+    await fetch('/api/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
     localStorage.removeItem(LS_KEY)
-    alert(`Event created:\n${JSON.stringify(event, null, 2)}`)
+     alert('Event saved')
   }
 
   // Determine which fields are still missing when on the review step

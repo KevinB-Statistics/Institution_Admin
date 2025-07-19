@@ -1,5 +1,6 @@
 import { Metadata } from "next"
-import { listAllEvents, EventRecord } from "@/lib/adminApi"
+import { listAllEvents } from "@/lib/adminApi"
+import type { EventRecord } from "@/lib/types"
 import CalendarView from "@/components/CalendarView"
 
 export const metadata: Metadata = {

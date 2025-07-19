@@ -1,14 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { EventRecord, listAllEvents } from "@/lib/adminApi"
+import type { EventRecord } from "@/lib/types"
 
 export default function CompactCalendar({ events }: { events?: EventRecord[] }) {
   const [data, setData] = useState<EventRecord[]>(events || [])
 
   useEffect(() => {
     if (!events) {
-      listAllEvents().then(setData)
+      fetch("/api/events")
+        .then((res) => res.json())
+        .then(setData)
     }
   }, [events])
 

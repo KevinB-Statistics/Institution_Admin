@@ -4,7 +4,7 @@ import type { JSX } from "react";
 
 import React, { useState, useMemo, Fragment } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { EventRecord } from "@/lib/adminApi";
+import type { EventRecord } from "@/lib/types";
 
 type View = "week" | "month" | "year";
 
