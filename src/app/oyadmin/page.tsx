@@ -1,30 +1,34 @@
 "use client";
 import { useEffect, useState } from "react";
+import type { RequestRecord } from "@/lib/types";
 
-interface RequestRecord {
-  id: string;
-  fullName: string;
-  institution: string;
-  adminEmail: string;
-  studentDomain: string;
-  facultyDomain: string;
-  status: string;
-}
+
 
 export default function RequestsPage() {
   const [requests, setRequests] = useState<RequestRecord[]>([]);
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("requests") || "[]");
-    setRequests(stored);
+    fetch("/api/requests")
+      .then((r) => (r.ok ? r.json() : []))
+      .then(setRequests)
+      .catch((err) => console.error(err));
   }, []);
 
-  function updateStatus(id: string, status: "approved" | "declined") {
-    const updated = requests.map((r) =>
-      r.id === id ? { ...r, status } : r
-    );
-    setRequests(updated);
-    localStorage.setItem("requests", JSON.stringify(updated));
+  async function updateStatus(id: string, status: "approved" | "declined") {
+    try {
+      const res = await fetch(`/api/requests/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) throw new Error("Failed to update");
+      const updated = await res.json();
+      setRequests((reqs) =>
+        reqs.map((r) => (r.id === id ? updated : r))
+      );
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (

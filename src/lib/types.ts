@@ -77,3 +77,24 @@ export interface UserRecord {
   /** Plain text password for the admin. In production this should be hashed */
   password: string
 }
+
+/**
+ * Represents a pending onboarding request submitted from the main landing page.
+ * Requests are stored server-side so the OverYonder admin can review them.
+ */
+export interface RequestRecord {
+  /** Unique identifier for the request */
+  id: string
+  /** Requester's full name */
+  fullName: string
+  /** Name of the institution requesting access */
+  institution: string
+  /** Contact email for the admin */
+  adminEmail: string
+  /** Email domain used for students (e.g. students.example.edu) */
+  studentDomain: string
+  /** Email domain used for faculty (e.g. faculty.example.edu) */
+  facultyDomain: string
+  /** Current moderation status for the request */
+  status: 'pending' | 'approved' | 'declined'
+}

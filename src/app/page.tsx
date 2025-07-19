@@ -8,41 +8,57 @@ export default function Home() {
   const [declined, setDeclined] = useState(false);
   const router = useRouter();
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
-    const request = {
-      id: Date.now().toString(),
+    const payload = {
       fullName: data.get("fullName"),
       institution: data.get("institution"),
       adminEmail: data.get("adminEmail"),
       studentDomain: data.get("studentDomain"),
       facultyDomain: data.get("facultyDomain"),
-      status: "pending",
-    } as any;
-    const existing = JSON.parse(localStorage.getItem("requests") || "[]");
-    existing.push(request);
-    localStorage.setItem("requests", JSON.stringify(existing));
-    localStorage.setItem("pendingRequestId", request.id);
-    setSubmitted(true);
+      };
+    try {
+      const res = await fetch("/api/requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("Failed to create request");
+      const created = await res.json();
+      localStorage.setItem("pendingRequestId", created.id);
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+    }
   }
+  useEffect(() => {
+    // Check for an existing pending request when the component mounts
+    const id = localStorage.getItem("pendingRequestId");
+    if (id) setSubmitted(true);
+  }, []);
 
   useEffect(() => {
     if (!submitted) return;
     const id = localStorage.getItem("pendingRequestId");
     if (!id) return;
-    const interval = setInterval(() => {
-      const stored = JSON.parse(localStorage.getItem("requests") || "[]");
-      const req = stored.find((r: any) => r.id === id);
-      if (req?.status === "approved") {
-        clearInterval(interval);
-        localStorage.removeItem("pendingRequestId");
-        router.push("/admin");
-      } else if (req?.status === "declined") {
-        clearInterval(interval);
-        localStorage.removeItem("pendingRequestId");
-        setDeclined(true);
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/requests/${id}`);
+        if (!res.ok) return;
+        const req = await res.json();
+        if (req.status === "approved") {
+          clearInterval(interval);
+          localStorage.removeItem("pendingRequestId");
+          router.push("/admin");
+        } else if (req.status === "declined") {
+          clearInterval(interval);
+          localStorage.removeItem("pendingRequestId");
+          setDeclined(true);
+        }
+      } catch (err) {
+        console.error(err);
       }
     }, 1000);
     return () => clearInterval(interval);
