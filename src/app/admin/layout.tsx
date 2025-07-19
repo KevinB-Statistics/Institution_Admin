@@ -13,7 +13,7 @@ export default function AdminLayout({
   return (
     <div className="flex">
       <AdminSidebar />
-      <main className="flex-1 p-4">{children}</main>
+      <main className="flex-1 min-h-[calc(100vh-59px)] p-4">{children}</main>
     </div>
   );
 }

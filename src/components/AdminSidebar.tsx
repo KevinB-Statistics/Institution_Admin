@@ -74,7 +74,7 @@ export default function AdminSidebar() {
     return (
     <aside
       className={`
-        bg-white border-r shadow-sm
+        bg-white border-r shadow-sm min-h
         transition-all duration-200 ease-in-out
         ${collapsed ? "w-14" : "w-56"}
       `}
