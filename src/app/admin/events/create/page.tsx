@@ -62,12 +62,12 @@ export default function CreateEventPage() {
   if (!isLoaded) return <div>Loading map...</div>
 
   return (
-    <div className="bg-gray-100 flex items-start justify-center pt-16 px-6 h-[calc(100vh-5rem)] overflow-hidden">
-       <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg overflow-auto max-h-[calc(100vh-9rem)]">
+    <div className="bg-gray-100 flex items-start justify-center p-2">
+       <div className="w-full max-w-7xl bg-white rounded-xl shadow-lg">
         {/* Header */}
-        <div className="p-6">
+        <div className="p-5">
           <h1 className="text-2xl font-semibold text-center mb-1">Create New Event</h1>
-          <p className="text-center text-sm text-gray-500 mb-6">
+          <p className="text-center text-sm text-gray-500 mb-2">
             Step {step} of {steps.length}: {steps[step - 1]}
           </p>
 

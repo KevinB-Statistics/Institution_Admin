@@ -11,7 +11,7 @@ export default function EventsLayout({
   children: React.ReactNode
 }) {
   return (
-    <section className="p-6 bg-gray-50 dark:bg-gray-900">
+    <section className="p-2 bg-gray-50 dark:bg-gray-900">
       {children}
     </section>
   )

@@ -71,7 +71,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="flex items-center justify-center p-6">
       <form
         onSubmit={handleSubmit}
         className="space-y-4 bg-white shadow rounded p-6 max-w-md w-full"

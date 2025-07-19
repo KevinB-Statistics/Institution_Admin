@@ -242,7 +242,7 @@ export default function AdminDashboard() {
       {/* Toolbar */}
       <div className="flex items-center justify-between mb-6 gap-4">
         <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 flex-1">Dashboard</h1>
-        <button onClick={() => setShowCmd(true)} className="px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow">Search</button>
+        <button onClick={() => setShowCmd(true)} className="px-6 py-2 bg-white dark:bg-gray-800 rounded-lg shadow">Search</button>
         <Tippy content="Notifications">
           <button className="relative p-2 bg-white dark:bg-gray-800 rounded-full shadow">
             <BellIcon />
