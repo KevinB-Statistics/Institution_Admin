@@ -30,7 +30,9 @@ type FormValues = {
 export default function CreateEventPage() {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+    libraries: ["places"]
   })
+
   const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null)
   const [step, setStep] = useState(1)
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -66,17 +68,55 @@ export default function CreateEventPage() {
     if (saved) reset(JSON.parse(saved))
   }, [reset])
 
+  const progress = (() => {
+    const vals = watched as FormValues
+    const required = [
+      !!vals.imageFile?.[0],
+      !!vals.category,
+      !!vals.title,
+      !!vals.description,
+      vals.tags && vals.tags.length > 0,
+      !!vals.start,
+      !!vals.end,
+    ]
+    return required.filter(Boolean).length / required.length
+  })()
+
+  const locationVal = getValues("location")
+  const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${locationVal.lat},${locationVal.lng}&zoom=17&size=600x300&markers=color:red%7C${locationVal.lat},${locationVal.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
+
+
   if (loadError) return <div>Error loading maps</div>
   if (!isLoaded)  return <div>Loading map...</div>
 
   const onNext = () => setStep(s => Math.min(s+1,4))
   const onPrev = () => setStep(s => Math.max(s-1,1))
 
+  const missingRequired = (() => {
+    if (step !== 4) return [] as { label: string; step: number }[]
+    const v = getValues()
+    const missing: { label: string; step: number }[] = []
+    if (!v.imageFile?.[0]) missing.push({ label: "Image", step: 1 })
+    if (!v.category) missing.push({ label: "Category", step: 1 })
+    if (!v.title) missing.push({ label: "Title", step: 1 })
+    if (!v.description) missing.push({ label: "Description", step: 1 })
+    if (!v.tags || v.tags.length === 0) missing.push({ label: "Tags", step: 1 })
+    if (!v.start) missing.push({ label: "Start", step: 3 })
+    if (!v.end) missing.push({ label: "End", step: 3 })
+    return missing
+  })()
+
   return (
     <form onSubmit={handleSubmit(data => console.log("submit",data))} className="p-4 bg-gray-100 rounded-xl shadow">
       {/* header */}
       <h1 className="text-2xl font-semibold text-center">Create New Event</h1>
-      <p className="text-center text-sm mb-4">Step {step}/4</p>
+      <p className="text-center text-sm">Step {step}/4</p>
+      <div className="h-2 bg-gray-200 rounded-full overflow-hidden my-2">
+        <div
+          className="h-full bg-blue-600 transition-all"
+          style={{ width: `${Math.round(progress * 100)}%` }}
+        />
+      </div>
 
       {/* Stepper (clickable) */}
       <div className="flex justify-center space-x-3 mb-6">
@@ -152,6 +192,7 @@ export default function CreateEventPage() {
               <Controller
                 name="tags"
                 control={control}
+                rules={{ validate: v => v.length > 0 }}
                 render={({ field }) => {
                   const [input, setInput] = useState("")
                   const add = () => {
@@ -187,6 +228,7 @@ export default function CreateEventPage() {
                   )
                 }}
               />
+              {errors.tags && <p className="text-red-500 text-xs">Required</p>}
             </div>
           </div>
         </div>
@@ -272,6 +314,23 @@ export default function CreateEventPage() {
       {step === 4 && (
         <div className="space-y-4">
           <h2 className="text-lg font-semibold">Review</h2>
+          {missingRequired.length > 0 && (
+            <div className="bg-red-100 p-3 rounded">
+              <p className="text-red-700 font-medium mb-2">
+                Please complete the following fields:
+              </p>
+              <ul className="list-disc list-inside text-red-700 text-sm space-y-1">
+                {missingRequired.map(m => (
+                  <li key={m.label}>
+                    <button type="button" className="underline" onClick={() => setStep(m.step)}>
+                      {m.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <img src={staticMapUrl} alt="Location preview" className="w-full rounded" />
           <pre className="bg-gray-50 p-4 rounded text-xs">{JSON.stringify(getValues(),null,2)}</pre>
         </div>
       )}
