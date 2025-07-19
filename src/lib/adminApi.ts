@@ -1,28 +1,93 @@
+import { promises as fs } from 'fs'
+import path from 'path'
+
+/**
+ * Path to the local JSON database file. The file is stored alongside this
+ * module and contains an array of event objects. For a real application you
+ * would likely store this in a data directory or use a proper database, but
+ * this simple file‑based approach lets you persist events without a back‑end.
+ */
+const DB_PATH = path.join(process.cwd(), 'events.json')
+
 export interface EventRecord {
   id: string
   title: string
   date: string
-  status: "approved" | "pending" | "rejected" | "template"
+  status: 'approved' | 'pending' | 'rejected' | 'template'
   organizer: string
   description: string
+  category?: string
+  tags?: string[]
+  visibility?: string
+  selectedClub?: string
+  selectedGroup?: string
+  location?: { lat: number; lng: number }
+  start?: string
+  end?: string
+  rrule?: string
+  timezone?: string
 }
 
-const _mockEvents: EventRecord[] = [
-  { id: "1", title: "Welcome Week", date: "2025-07-25", status: "approved", organizer: "Student Affairs", description: "Freshman come visit." },
-  { id: "2", title: "Fall Club Fair", date: "2025-07-15", status: "approved", organizer: "Clubs Office", description: "Clubs for students." },
-  { id: "3", title: "Spring Break Bash", date: "2025-07-01", status: "pending", organizer: "Events Team", description: "It's spring break!!!" },
-  { id: "4", title: "Sample Template", date: "2025-07-25", status: "template", organizer: "Template Dept", description: "Sample." },
-  // …add more stub events as needed
-]
+/**
+ * Read all events from the JSON database. If the file does not exist or
+ * contains invalid JSON, an empty array is returned.
+ */
+async function readEvents(): Promise<EventRecord[]> {
+  try {
+    const data = await fs.readFile(DB_PATH, 'utf8')
+    return JSON.parse(data) as EventRecord[]
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+      return []
+    }
+    console.error('Failed to read events:', err)
+    return []
+  }
+}
 
+/**
+ * Write an array of events back to the JSON database file.
+ */
+async function writeEvents(events: EventRecord[]): Promise<void> {
+  const data = JSON.stringify(events, null, 2)
+  await fs.writeFile(DB_PATH, data, 'utf8')
+}
+
+/**
+ * List all events. This function reads from the local JSON file each time
+ * to ensure fresh data.
+ */
 export async function listAllEvents(): Promise<EventRecord[]> {
-  return _mockEvents
+  return await readEvents()
 }
 
+/**
+ * List pending events only.
+ */
 export async function listPendingEvents(): Promise<EventRecord[]> {
-  return _mockEvents.filter((e) => e.status === "pending")
+  const events = await readEvents()
+  return events.filter((e) => e.status === 'pending')
 }
 
+/**
+ * List template events only.
+ */
 export async function listTemplateEvents(): Promise<EventRecord[]> {
-  return _mockEvents.filter((e) => e.status === "template")
+  const events = await readEvents()
+  return events.filter((e) => e.status === 'template')
+}
+
+/**
+ * Create a new event and persist it to the JSON database. The caller must
+ * provide an object with at least title, date, status, organizer, and
+ * description. The function assigns a new unique id automatically. It
+ * returns the newly created event record.
+ */
+export async function createEvent(event: Omit<EventRecord, 'id'>): Promise<EventRecord> {
+  const events = await readEvents()
+  const newId = (Date.now()).toString()
+  const newEvent: EventRecord = { id: newId, ...event }
+  events.push(newEvent)
+  await writeEvents(events)
+  return newEvent
 }
