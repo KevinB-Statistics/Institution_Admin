@@ -57,3 +57,23 @@ export interface ClubRecord {
   /** Array of event identifiers hosted by this club (optional) */
   events?: string[]
 }
+
+/**
+ * Represents an institution administrator or user account within the
+ * application. This record stores basic identity information for the
+ * admin along with the institution they represent. In a real system
+ * you would likely include hashed passwords, roles and additional
+ * metadata. For this file‑based prototype we keep the fields simple.
+ */
+export interface UserRecord {
+  /** Unique identifier for the user */
+  id: string
+  /** The name of the institution this admin belongs to (e.g. University of Idaho) */
+  institution: string
+  /** Full name of the admin */
+  name: string
+  /** Contact email for the admin. Must be unique across users */
+  email: string
+  /** Plain text password for the admin. In production this should be hashed */
+  password: string
+}
