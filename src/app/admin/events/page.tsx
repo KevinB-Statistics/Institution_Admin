@@ -12,7 +12,7 @@ export default async function EventsPage() {
   const events: EventRecord[] = await listAllEvents()
 
   return (
-    <section className="p-5 bg-gray-50 min-h-screen">
+    <section className="p-5 bg-gray-50 min-h-full">
       {/* Pass the data into our client-side explorer */}
       <EventsExplorer events={events} />
     </section>

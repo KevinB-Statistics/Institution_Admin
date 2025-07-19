@@ -238,7 +238,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <section className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <section className="p-6 bg-gray-50 dark:bg-gray-900 min-h-full flex-1">
       {/* Toolbar */}
       <div className="flex items-center justify-between mb-6 gap-4">
         <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 flex-1">Dashboard</h1>

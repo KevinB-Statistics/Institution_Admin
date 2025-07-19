@@ -220,7 +220,7 @@ export default function CalendarView({ events }: { events: EventRecord[] }) {
   };
 
   return (
-    <section className="flex flex-col h-screen bg-gray-100">
+    <section className="flex flex-col h-full flex-1 bg-gray-100">
       <header className="flex items-center justify-between px-4 py-2 bg-white shadow-sm">
         <div className="flex items-center gap-2">
           <button onClick={() => move(-1)} aria-label="Previous" className="p-2 rounded-full bg-gray-50 hover:bg-gray-200">

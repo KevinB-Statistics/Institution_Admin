@@ -12,7 +12,7 @@ export default function BudgetLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen space-y-6">
+    <section className="p-6 bg-gray-50 dark:bg-gray-900 min-h-full space-y-6">
       <BudgetNav />
       {children}
     </section>

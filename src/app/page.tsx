@@ -50,7 +50,7 @@ export default function Home() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 space-y-4">
+      <div className="min-h-full flex flex-col items-center justify-center p-4 space-y-4">
         {declined ? (
           <>
             <h1 className="text-2xl font-bold text-red-600">Request Declined</h1>
