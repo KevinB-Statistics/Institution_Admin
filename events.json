@@ -1,95 +1,14 @@
 [
   {
-    "id": "1",
-    "title": "Welcome Week",
-    "date": "2025-07-25",
-    "status": "approved",
-    "organizer": "Student Affairs",
-    "description": "Freshman come visit.",
-    "category": "Social",
-    "tags": [
-      "welcome",
-      "freshmen"
-    ],
-    "visibility": "Everyone",
-    "location": {
-      "lat": 43.65362,
-      "lng": -116.67693
-    },
-    "start": "2025-07-25T10:00",
-    "end": "2025-07-25T12:00"
-  },
-  {
-    "id": "2",
-    "title": "Fall Club Fair",
-    "date": "2025-07-15",
-    "status": "approved",
-    "organizer": "Clubs Office",
-    "description": "Clubs for students.",
-    "category": "Academic",
-    "tags": [
-      "clubs",
-      "fair"
-    ],
-    "visibility": "Everyone",
-    "location": {
-      "lat": 43.65362,
-      "lng": -116.67693
-    },
-    "start": "2025-07-15T13:00",
-    "end": "2025-07-15T15:00"
-  },
-  {
-    "id": "3",
-    "title": "Spring Break Bash",
-    "date": "2025-07-01",
-    "status": "pending",
-    "organizer": "Events Team",
-    "description": "It's spring break!!!",
-    "category": "Sports",
-    "tags": [
-      "spring",
-      "bash"
-    ],
-    "visibility": "Group",
-    "selectedGroup": "Group A",
-    "location": {
-      "lat": 43.65362,
-      "lng": -116.67693
-    },
-    "start": "2025-07-01T20:00",
-    "end": "2025-07-01T23:59"
-  },
-  {
-    "id": "4",
-    "title": "Sample Template",
-    "date": "2025-07-25",
-    "status": "template",
-    "organizer": "Template Dept",
-    "description": "Sample.",
-    "category": "Other",
-    "tags": [
-      "template"
-    ],
-    "visibility": "Club",
-    "selectedClub": "Chess Club",
-    "location": {
-      "lat": 43.65362,
-      "lng": -116.67693
-    },
-    "start": "2025-07-25T09:00",
-    "end": "2025-07-25T11:00"
-  },
-  {
-    "id": "1752945051790",
-    "title": "Gerald's Birthday",
-    "description": "25th Birthday",
+    "id": "1752947358492",
+    "title": "Gerlad's Birthday",
+    "description": "25th Birthday!",
     "date": "2025-07-19",
     "status": "pending",
     "organizer": "Unknown",
     "category": "Social",
     "tags": [
-      "Bday"
+      "Fun"
     ],
     "visibility": "Everyone",
     "selectedClub": "",
@@ -98,15 +17,15 @@
       "lat": 43.65326090000001,
       "lng": -116.6754816
     },
-    "start": "2025-07-19T20:10",
-    "end": "2025-07-19T20:50",
+    "start": "2025-07-19T20:00",
+    "end": "2025-07-19T21:00",
     "timezone": "America/Boise"
   },
   {
-    "id": "1752946397433",
-    "title": "Gerald Birthday 2",
-    "description": "26th Birthday",
-    "date": "2025-07-23",
+    "id": "1752947361910",
+    "title": "Gerlad's Birthday",
+    "description": "25th Birthday!",
+    "date": "2025-07-19",
     "status": "pending",
     "organizer": "Unknown",
     "category": "Social",
@@ -117,33 +36,11 @@
     "selectedClub": "",
     "selectedGroup": "",
     "location": {
-      "lat": 43.6524228,
-      "lng": -116.6772971
+      "lat": 43.65326090000001,
+      "lng": -116.6754816
     },
-    "start": "2025-07-23T20:00",
-    "end": "2025-07-23T21:00",
-    "timezone": "America/Boise"
-  },
-  {
-    "id": "1752946401730",
-    "title": "Gerald Birthday 2",
-    "description": "26th Birthday",
-    "date": "2025-07-23",
-    "status": "pending",
-    "organizer": "Unknown",
-    "category": "Social",
-    "tags": [
-      "Fun"
-    ],
-    "visibility": "Everyone",
-    "selectedClub": "",
-    "selectedGroup": "",
-    "location": {
-      "lat": 43.6524228,
-      "lng": -116.6772971
-    },
-    "start": "2025-07-23T20:00",
-    "end": "2025-07-23T21:00",
+    "start": "2025-07-19T20:00",
+    "end": "2025-07-19T21:00",
     "timezone": "America/Boise"
   }
 ]

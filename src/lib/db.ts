@@ -1,5 +1,13 @@
 // File: src/lib/db.ts
 
+// This module provides simple summary helpers for the admin dashboard.
+// In the initial prototype of this project, these helpers returned
+// hard‑coded counts from a `_mockEvents` array. However, that approach
+// prevented the rest of the application from reflecting changes made via
+// the event creation and editing interfaces. To ensure that the dashboard
+// stays in sync with the persisted data, these helpers now read from the
+// same JSON file used elsewhere in the app. See `src/lib/adminApi.ts` for
+// the file‑based persistence implementation.
 
 import { listAllEvents } from './adminApi'
 

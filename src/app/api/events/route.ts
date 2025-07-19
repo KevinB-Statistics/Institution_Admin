@@ -7,8 +7,8 @@ import { listAllEvents, createEvent } from '@/lib/adminApi'
  * API handler for `/api/events`.
  *
  * This route supports two HTTP methods:
- *  - GET  return the full list of events as JSON.
- *  - POST create a new event from the JSON body and return it.
+ *  - GET  – return the full list of events as JSON.
+ *  - POST – create a new event from the JSON body and return it.
  *
  * The functions used here delegate to the file‑based persistence layer in
  * `src/lib/adminApi.ts`. If the data directory or JSON file does not
