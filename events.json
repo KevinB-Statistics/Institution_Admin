@@ -7,9 +7,15 @@
     "organizer": "Student Affairs",
     "description": "Freshman come visit.",
     "category": "Social",
-    "tags": ["welcome", "freshmen"],
+    "tags": [
+      "welcome",
+      "freshmen"
+    ],
     "visibility": "Everyone",
-    "location": { "lat": 43.65362, "lng": -116.67693 },
+    "location": {
+      "lat": 43.65362,
+      "lng": -116.67693
+    },
     "start": "2025-07-25T10:00",
     "end": "2025-07-25T12:00"
   },
@@ -21,9 +27,15 @@
     "organizer": "Clubs Office",
     "description": "Clubs for students.",
     "category": "Academic",
-    "tags": ["clubs", "fair"],
+    "tags": [
+      "clubs",
+      "fair"
+    ],
     "visibility": "Everyone",
-    "location": { "lat": 43.65362, "lng": -116.67693 },
+    "location": {
+      "lat": 43.65362,
+      "lng": -116.67693
+    },
     "start": "2025-07-15T13:00",
     "end": "2025-07-15T15:00"
   },
@@ -35,10 +47,16 @@
     "organizer": "Events Team",
     "description": "It's spring break!!!",
     "category": "Sports",
-    "tags": ["spring", "bash"],
+    "tags": [
+      "spring",
+      "bash"
+    ],
     "visibility": "Group",
     "selectedGroup": "Group A",
-    "location": { "lat": 43.65362, "lng": -116.67693 },
+    "location": {
+      "lat": 43.65362,
+      "lng": -116.67693
+    },
     "start": "2025-07-01T20:00",
     "end": "2025-07-01T23:59"
   },
@@ -50,11 +68,38 @@
     "organizer": "Template Dept",
     "description": "Sample.",
     "category": "Other",
-    "tags": ["template"],
+    "tags": [
+      "template"
+    ],
     "visibility": "Club",
     "selectedClub": "Chess Club",
-    "location": { "lat": 43.65362, "lng": -116.67693 },
+    "location": {
+      "lat": 43.65362,
+      "lng": -116.67693
+    },
     "start": "2025-07-25T09:00",
     "end": "2025-07-25T11:00"
+  },
+  {
+    "id": "1752945051790",
+    "title": "Gerald's Birthday",
+    "description": "25th Birthday",
+    "date": "2025-07-19",
+    "status": "pending",
+    "organizer": "Unknown",
+    "category": "Social",
+    "tags": [
+      "Bday"
+    ],
+    "visibility": "Everyone",
+    "selectedClub": "",
+    "selectedGroup": "",
+    "location": {
+      "lat": 43.65326090000001,
+      "lng": -116.6754816
+    },
+    "start": "2025-07-19T20:10",
+    "end": "2025-07-19T20:50",
+    "timezone": "America/Boise"
   }
 ]
