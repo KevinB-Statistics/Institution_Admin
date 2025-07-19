@@ -42,5 +42,27 @@
     "start": "2025-07-19T20:00",
     "end": "2025-07-19T21:00",
     "timezone": "America/Boise"
+  },
+  {
+    "id": "1752948152737",
+    "title": "Skibidi Day",
+    "description": "Gerald is skibid",
+    "date": "2025-07-21",
+    "status": "pending",
+    "organizer": "Unknown",
+    "category": "Cultural",
+    "tags": [
+      "poop"
+    ],
+    "visibility": "Everyone",
+    "selectedClub": "Coding Club",
+    "selectedGroup": "",
+    "location": {
+      "lat": 43.65362,
+      "lng": -116.67693
+    },
+    "start": "2025-07-21T12:00",
+    "end": "2025-07-21T22:00",
+    "timezone": "America/Boise"
   }
 ]

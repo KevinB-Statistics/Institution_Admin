@@ -41,3 +41,19 @@ export interface EventRecord {
   /** Timezone identifier for start/end/recurrence calculations */
   timezone?: string
 }
+
+/**
+ * A club record represents an organization that can host events and have members.
+ */
+export interface ClubRecord {
+  /** Unique identifier for the club */
+  id: string
+  /** Name of the club */
+  name: string
+  /** Longer description of the club */
+  description: string
+  /** Array of user identifiers or names representing members (optional) */
+  members?: string[]
+  /** Array of event identifiers hosted by this club (optional) */
+  events?: string[]
+}
