@@ -4,7 +4,13 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { EventRecord } from '@/lib/types'
 
-export default function EditEventForm({ event }: { event: EventRecord }) {
+export default function EditEventForm({
+  event,
+  onSaved,
+}: {
+  event: EventRecord
+  onSaved?: (e: EventRecord) => void
+}) {
   const router = useRouter()
   const [form, setForm] = useState({
     title: event.title,
@@ -18,12 +24,16 @@ export default function EditEventForm({ event }: { event: EventRecord }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    await fetch(`/api/events/${event.id}`, {
+    const res = await fetch(`/api/events/${event.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...event, ...form }),
     })
-    router.push('/admin/events')
+     if (res.ok) {
+      const updated = (await res.json()) as EventRecord
+      onSaved?.(updated)
+      router.refresh()
+    }
   }
 
   return (

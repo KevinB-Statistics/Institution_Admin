@@ -6,6 +6,8 @@ import { Tab } from "@headlessui/react"
 import Link from "next/link"
 import type { EventRecord } from "@/lib/types"
 import { Grid, List, Menu } from "lucide-react"
+import EditEventModal from "./EditEventModal"
+
 
 type ViewMode = "cards" | "list" | "compact"
 type SortKey  = "date" | "title"
@@ -27,13 +29,15 @@ const statusStyles: Record<string,string> = {
 }
 
 export default function EventsExplorer({ events }: { events: EventRecord[] }) {
+  const [eventsList, setEventsList] = useState<EventRecord[]>(events)
   const [selectedTab, setSelectedTab] = useState<TabKey>("All Events")
   const [mode,        setMode]        = useState<ViewMode>("cards")
   const [query,       setQuery]       = useState("")
   const [sortKey,     setSortKey]     = useState<SortKey>("date")
+  const [editing,     setEditing]     = useState<EventRecord | null>(null)
 
   // 1) filter by tab
-  const filteredByTab = events.filter(e => {
+  const filteredByTab = eventsList.filter(e => {
     if (selectedTab === "All Events") return true
     if (selectedTab === "Pending")    return e.status === "pending"
     if (selectedTab === "Templates")  return e.status === "template"
@@ -135,15 +139,24 @@ export default function EventsExplorer({ events }: { events: EventRecord[] }) {
 </Tab.Group>
 
       {/* ─── Content ─────────────────────────────────────────── */}
-      {mode === "cards"   && <CardView    events={filtered} />}
-      {mode === "list"    && <ListView    events={filtered} />}
-      {mode === "compact" && <CompactView events={filtered} />}
+      {mode === "cards"   && <CardView    events={filtered}   onEdit={setEditing} />}
+      {mode === "list"    && <ListView    events={filtered}   onEdit={setEditing} />}
+      {mode === "compact" && <CompactView events={filtered} onEdit={setEditing} />}
+      <EditEventModal
+        event={editing}
+        open={editing !== null}
+        onClose={() => setEditing(null)}
+        onSaved={(ev) => {
+          setEventsList(list => list.map(e => e.id === ev.id ? ev : e))
+          setEditing(null)
+        }}
+      />
     </div>
   )
 }
 
 
-function CardView({ events }: { events: EventRecord[] }) {
+function CardView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: EventRecord) => void }) {
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {events.map(e => (
@@ -172,13 +185,13 @@ function CardView({ events }: { events: EventRecord[] }) {
           <p className="mt-3 text-sm text-gray-700">
             Organizer: <span className="font-medium">{e.organizer}</span>
           </p>
-          <Link
-            href={`/admin/events/${e.id}/edit`}
+          <button
+            onClick={() => onEdit(e)}
             className="absolute top-6 right-6 text-blue-600 hover:text-blue-800 transition"
             aria-label={`Edit ${e.title}`}
           >
             ✎
-          </Link>
+          </button>
         </div>
       ))}
       {events.length === 0 && (
@@ -190,7 +203,7 @@ function CardView({ events }: { events: EventRecord[] }) {
   )
 }
 
-function ListView({ events }: { events: EventRecord[] }) {
+function ListView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: EventRecord) => void }) {
   return (
     <div className="overflow-auto rounded-lg border bg-white shadow">
       <table className="min-w-full divide-y bg-white">
@@ -213,9 +226,9 @@ function ListView({ events }: { events: EventRecord[] }) {
               <td className="px-4 py-2 capitalize">{e.status}</td>
               <td className="px-4 py-2">{e.organizer}</td>
               <td className="px-4 py-2">
-                <Link href={`/admin/events/${e.id}/edit`} className="text-blue-600 hover:underline">
+                <button onClick={() => onEdit(e)} className="text-blue-600 hover:underline">
                   Edit
-                </Link>
+                </button>
               </td>
             </tr>
           ))}
@@ -225,7 +238,7 @@ function ListView({ events }: { events: EventRecord[] }) {
   )
 }
 
-function CompactView({ events }: { events: EventRecord[] }) {
+function CompactView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: EventRecord) => void }) {
   return (
     <ul className="space-y-2">
       {events.map(e => (
@@ -239,9 +252,9 @@ function CompactView({ events }: { events: EventRecord[] }) {
               {new Date(e.date).toLocaleDateString()}
             </p>
           </div>
-          <Link href={`/admin/events/${e.id}/edit`} className="text-blue-600 hover:underline text-sm">
+          <button onClick={() => onEdit(e)} className="text-blue-600 hover:underline text-sm">
             Edit
-          </Link>
+          </button>
         </li>
       ))}
       {events.length === 0 && (

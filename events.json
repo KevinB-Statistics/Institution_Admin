@@ -101,5 +101,49 @@
     "start": "2025-07-19T20:10",
     "end": "2025-07-19T20:50",
     "timezone": "America/Boise"
+  },
+  {
+    "id": "1752946397433",
+    "title": "Gerald Birthday 2",
+    "description": "26th Birthday",
+    "date": "2025-07-23",
+    "status": "pending",
+    "organizer": "Unknown",
+    "category": "Social",
+    "tags": [
+      "Fun"
+    ],
+    "visibility": "Everyone",
+    "selectedClub": "",
+    "selectedGroup": "",
+    "location": {
+      "lat": 43.6524228,
+      "lng": -116.6772971
+    },
+    "start": "2025-07-23T20:00",
+    "end": "2025-07-23T21:00",
+    "timezone": "America/Boise"
+  },
+  {
+    "id": "1752946401730",
+    "title": "Gerald Birthday 2",
+    "description": "26th Birthday",
+    "date": "2025-07-23",
+    "status": "pending",
+    "organizer": "Unknown",
+    "category": "Social",
+    "tags": [
+      "Fun"
+    ],
+    "visibility": "Everyone",
+    "selectedClub": "",
+    "selectedGroup": "",
+    "location": {
+      "lat": 43.6524228,
+      "lng": -116.6772971
+    },
+    "start": "2025-07-23T20:00",
+    "end": "2025-07-23T21:00",
+    "timezone": "America/Boise"
   }
 ]
