@@ -11,16 +11,18 @@ import { getClub, updateClub, deleteClub } from '@/lib/clubsApi'
  *  - PUT    – updates the club with provided fields.
  *  - DELETE – removes the club.
  */
-export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
-  const club = await getClub(params.id)
+export async function GET(_: NextRequest, { params }: { params: { id: string } } | { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const club = await getClub(id)
   if (!club) return new NextResponse('Club not found', { status: 404 })
   return NextResponse.json(club)
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } } | { params: Promise<{ id: string }> }) {
   try {
     const data = await request.json()
-    const updated = await updateClub(params.id, data)
+    const { id } = await params
+    const updated = await updateClub(id, data)
     if (!updated) return new NextResponse('Club not found', { status: 404 })
     return NextResponse.json(updated)
   } catch (err) {
@@ -29,8 +31,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
-  const ok = await deleteClub(params.id)
+export async function DELETE(_: NextRequest, { params }: { params: { id: string } } | { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const ok = await deleteClub(id)
   if (!ok) return new NextResponse('Club not found', { status: 404 })
   return new NextResponse(null, { status: 204 })
 }

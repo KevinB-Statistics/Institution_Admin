@@ -7,16 +7,18 @@ import { getRequest, updateRequest, deleteRequest } from '@/lib/requestsApi'
  * API handler for `/api/requests/:id`.
  * Supports GET, PUT and DELETE operations on a single request.
  */
-export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
-  const req = await getRequest(params.id)
+export async function GET(_: NextRequest, { params }: { params: { id: string } } | { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const req = await getRequest(id)
   if (!req) return new NextResponse('Request not found', { status: 404 })
   return NextResponse.json(req)
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } } | { params: Promise<{ id: string }> }) {
   try {
     const data = await request.json()
-    const updated = await updateRequest(params.id, data)
+    const { id } = await params
+    const updated = await updateRequest(id, data)
     if (!updated) return new NextResponse('Request not found', { status: 404 })
     return NextResponse.json(updated)
   } catch (err) {
@@ -25,8 +27,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
-  const ok = await deleteRequest(params.id)
+export async function DELETE(_: NextRequest, { params }: { params: { id: string } } | { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const ok = await deleteRequest(id)
   if (!ok) return new NextResponse('Request not found', { status: 404 })
   return new NextResponse(null, { status: 204 })
 }

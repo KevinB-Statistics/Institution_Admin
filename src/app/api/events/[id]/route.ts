@@ -13,8 +13,9 @@ import { getEvent, updateEvent, deleteEvent } from '@/lib/adminApi'
  */
 
 // Return a single event by ID
-export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
-  const event = await getEvent(params.id)
+export async function GET(_: NextRequest, { params }: { params: { id: string } } | { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const event = await getEvent(id)
   if (!event) {
     return new NextResponse('Event not found', { status: 404 })
   }
@@ -22,10 +23,11 @@ export async function GET(_: NextRequest, { params }: { params: { id: string } }
 }
 
 // Update an event by ID
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } } | { params: Promise<{ id: string }> }) {
   try {
     const data = await request.json()
-    const updated = await updateEvent(params.id, data as any)
+    const { id } = await params
+    const updated = await updateEvent(id, data as any)
     if (!updated) {
       return new NextResponse('Event not found', { status: 404 })
     }
@@ -37,8 +39,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 // Delete an event by ID
-export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
-  const ok = await deleteEvent(params.id)
+export async function DELETE(_: NextRequest, { params }: { params: { id: string } } | { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const ok = await deleteEvent(id)
   if (!ok) {
     return new NextResponse('Event not found', { status: 404 })
   }
