@@ -78,6 +78,10 @@ export interface UserRecord {
   email: string
   /** Plain text password (placeholder for now) */
   password: string
+  /** Short biography or description */
+  bio?: string
+  /** URL for the user's profile picture */
+  avatarUrl?: string
 }
 
 

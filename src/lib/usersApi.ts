@@ -37,7 +37,12 @@ export async function listAllUsers(): Promise<UserRecord[]> {
 /** Create a new user record. */
 export async function createUser(user: Omit<UserRecord, 'id'>): Promise<UserRecord> {
   const users = await readUsers()
-  const newUser: UserRecord = { id: Date.now().toString(), ...user }
+  const newUser: UserRecord = {
+    id: Date.now().toString(),
+    bio: '',
+    avatarUrl: '',
+    ...user,
+  }
   users.push(newUser)
   await writeUsers(users)
   return newUser

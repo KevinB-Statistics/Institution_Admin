@@ -76,7 +76,9 @@ export async function updateRequest(
         institution: requests[index].institution,
         name: requests[index].fullName,
         email: requests[index].adminEmail,
-        password: ''
+        password: '',
+        bio: '',
+        avatarUrl: ''
       })
     }
   }

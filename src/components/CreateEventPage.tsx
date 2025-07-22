@@ -5,7 +5,7 @@ import { useForm, Controller, useWatch } from "react-hook-form"
 import { GoogleMap, Marker, Autocomplete, useLoadScript } from "@react-google-maps/api"
 import { rrulestr, RRule, Weekday } from "rrule"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
-import useCurrentUser from "@/hooks/useCurrentUser"
+import useCurrentUser from "@/components/hooks/useCurrentUser"
 
 // Domain constants. In a production system these would come from the server.
 const CATEGORIES = ["Social", "Academic", "Sports", "Cultural", "Other"] as const

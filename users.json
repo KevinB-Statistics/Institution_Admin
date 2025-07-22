@@ -1,9 +1,29 @@
 [
+{
+    "id": "1",
+    "institution": "Example University",
+    "name": "Alice Johnson",
+    "email": "alice@example.edu",
+    "password": "",
+    "bio": "Coordinator for student clubs and activities.",
+    "avatarUrl": "/vercel.svg"
+  },
+  {
+    "id": "2",
+    "institution": "Example University",
+    "name": "Bob Smith",
+    "email": "bob@example.edu",
+    "password": "",
+    "bio": "Graduate assistant in the events office.",
+    "avatarUrl": "/vercel.svg"
+  },
   {
     "id": "1753145873529",
     "institution": "University of Idaho",
     "name": "Kevin Bui",
     "email": "kbui@uidaho.edu",
-    "password": ""
+    "password": "",
+    "bio": "Grad Student",
+    "avatarUrl": "/vercel.svg"
   }
 ]
