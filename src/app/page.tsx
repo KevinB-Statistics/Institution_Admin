@@ -99,6 +99,7 @@ export default function Home() {
           </label>
           <input
             id="fullName"
+            name="fullName"
             type="text"
             required
             className="w-full border rounded p-2"
@@ -110,6 +111,7 @@ export default function Home() {
           </label>
           <input
             id="institution"
+            name="institution"
             type="text"
             required
             className="w-full border rounded p-2"
@@ -121,6 +123,7 @@ export default function Home() {
           </label>
           <input
             id="adminEmail"
+            name="adminEmail"
             type="email"
             required
             className="w-full border rounded p-2"
@@ -132,8 +135,9 @@ export default function Home() {
           </label>
           <input
             id="studentDomain"
+            name="studentDomain"
             type="text"
-            placeholder="students.yourschool.edu"
+            placeholder="@students.yourschool.edu"
             required
             className="w-full border rounded p-2"
           />
@@ -144,8 +148,9 @@ export default function Home() {
           </label>
           <input
             id="facultyDomain"
+            name="facultyDomain"
             type="text"
-            placeholder="faculty.yourschool.edu"
+            placeholder="@faculty.yourschool.edu"
             required
             className="w-full border rounded p-2"
           />

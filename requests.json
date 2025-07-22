@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "1753145081537",
+    "status": "approved",
+    "fullName": "Kevin",
+    "institution": "Bui",
+    "adminEmail": "kbui@uidaho.edu",
+    "studentDomain": "@vandals.uidaho.edu",
+    "facultyDomain": "@uidaho.edu"
+  }
+]
