@@ -3,6 +3,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import type { RequestRecord } from './types'
+import { createUser, listAllUsers } from './usersApi'
 
 /**
  * Path to the local JSON database file for onboarding requests.
@@ -62,8 +63,24 @@ export async function updateRequest(
   const requests = await readRequests()
   const index = requests.findIndex((r) => r.id === id)
   if (index === -1) return null
+  const previous = requests[index]
   requests[index] = { ...requests[index], ...data, id }
   await writeRequests(requests)
+
+  // When a request transitions to approved, create a user record if one doesn't exist
+  if (previous.status !== 'approved' && requests[index].status === 'approved') {
+    const users = await listAllUsers()
+    const exists = users.some((u) => u.email === requests[index].adminEmail)
+    if (!exists) {
+      await createUser({
+        institution: requests[index].institution,
+        name: requests[index].fullName,
+        email: requests[index].adminEmail,
+        password: ''
+      })
+    }
+  }
+
   return requests[index]
 }
 

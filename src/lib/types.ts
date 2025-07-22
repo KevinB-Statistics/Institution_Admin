@@ -59,6 +59,25 @@ export interface ClubRecord {
 }
 
 /**
+ * Represents an institution administrator account. This minimal record
+ * stores basic identity information so approved requests can log in
+ * later once authentication is implemented.
+ */
+export interface UserRecord {
+  /** Unique identifier for the user */
+  id: string
+  /** Institution the user belongs to */
+  institution: string
+  /** Full name of the admin */
+  name: string
+  /** Contact email for the admin */
+  email: string
+  /** Plain text password (placeholder for now) */
+  password: string
+}
+
+
+/**
  * Represents a pending onboarding request submitted from the main landing page.
  * Requests are stored server-side so the OverYonder admin can review them.
  */
