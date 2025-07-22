@@ -52,6 +52,7 @@ export async function POST(request: NextRequest) {
       end: data.end,
       rrule: data.rrule,
       timezone: data.timezone,
+      creator: data.creator ?? 'Unknown',
     }
     const newEvent = await createEvent(payload as any)
     return NextResponse.json(newEvent, { status: 201 })

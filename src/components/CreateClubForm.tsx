@@ -5,6 +5,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { ClubRecord } from '@/lib/types'
+import useCurrentUser from '@/hooks/useCurrentUser'
 
 interface CreateClubFormProps {
   /** Called with the newly created club after a successful save */
@@ -23,6 +24,7 @@ export default function CreateClubForm({ onCreated, onClose }: CreateClubFormPro
   const router = useRouter()
   const [form, setForm] = useState({ name: '', description: '' })
   const [submitting, setSubmitting] = useState(false)
+  const user = useCurrentUser()
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target
@@ -37,7 +39,7 @@ export default function CreateClubForm({ onCreated, onClose }: CreateClubFormPro
       const res = await fetch('/api/clubs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form }),
+        body: JSON.stringify({ ...form, creator: user?.name }),
       })
       if (!res.ok) {
         console.error('Failed to create club:', await res.text())

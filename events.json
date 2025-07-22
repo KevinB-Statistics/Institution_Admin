@@ -19,7 +19,8 @@
     },
     "start": "2025-07-19T20:00",
     "end": "2025-07-19T21:00",
-    "timezone": "America/Boise"
+    "timezone": "America/Boise",
+    "creator": ""
   },
   {
     "id": "1752947361910",
@@ -41,7 +42,8 @@
     },
     "start": "2025-07-19T20:00",
     "end": "2025-07-19T21:00",
-    "timezone": "America/Boise"
+    "timezone": "America/Boise",
+    "creator": ""
   },
   {
     "id": "1752948152737",
@@ -63,6 +65,7 @@
     },
     "start": "2025-07-21T12:00",
     "end": "2025-07-21T22:00",
-    "timezone": "America/Boise"
+    "timezone": "America/Boise",
+    "creator": ""
   }
 ]

@@ -42,12 +42,15 @@ export default function ClubsExplorer({ clubs }: ClubsExplorerProps) {
         {clubsList.map(club => (
           <div key={club.id} className="relative rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
             <h3 className="text-lg font-medium text-gray-900">{club.name}</h3>
-            <p className="mt-1 text-sm text-gray-600 line-clamp-3">{club.description}</p>
-            <div className="mt-4 flex justify-between text-sm text-gray-500">
-              <span>{club.members?.length ?? 0} members</span>
-              <span>{club.events?.length ?? 0} events</span>
-            </div>
-            <div className="absolute top-3 right-3 flex space-x-2">
+          <p className="mt-1 text-sm text-gray-600 line-clamp-3">{club.description}</p>
+          <div className="mt-4 flex justify-between text-sm text-gray-500">
+            <span>{club.members?.length ?? 0} members</span>
+            <span>{club.events?.length ?? 0} events</span>
+          </div>
+          {club.creator && (
+            <p className="mt-2 text-xs text-gray-500">Created by {club.creator}</p>
+          )}
+          <div className="absolute top-3 right-3 flex space-x-2">
               <button
                 onClick={() => setEditing(club)}
                 className="text-blue-600 hover:text-blue-800 text-sm"

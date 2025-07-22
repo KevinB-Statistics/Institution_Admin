@@ -185,6 +185,9 @@ function CardView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: Event
           <p className="mt-3 text-sm text-gray-700">
             Organizer: <span className="font-medium">{e.organizer}</span>
           </p>
+          {e.creator && (
+            <p className="mt-1 text-xs text-gray-500">Created by {e.creator}</p>
+          )}
           <button
             onClick={() => onEdit(e)}
             className="absolute top-6 right-6 text-blue-600 hover:text-blue-800 transition"
@@ -213,6 +216,7 @@ function ListView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: Event
             <th className="px-4 py-2 text-left font-medium">Date</th>
             <th className="px-4 py-2 text-left font-medium">Status</th>
             <th className="px-4 py-2 text-left font-medium">Organizer</th>
+            <th className="px-4 py-2 text-left font-medium">Creator</th>
             <th className="px-4 py-2 text-left font-medium">Edit</th>
           </tr>
         </thead>
@@ -225,6 +229,7 @@ function ListView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: Event
               </td>
               <td className="px-4 py-2 capitalize">{e.status}</td>
               <td className="px-4 py-2">{e.organizer}</td>
+              <td className="px-4 py-2">{e.creator ?? 'Unknown'}</td>
               <td className="px-4 py-2">
                 <button onClick={() => onEdit(e)} className="text-blue-600 hover:underline">
                   Edit

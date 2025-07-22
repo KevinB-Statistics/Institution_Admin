@@ -40,6 +40,8 @@ export interface EventRecord {
   rrule?: string
   /** Timezone identifier for start/end/recurrence calculations */
   timezone?: string
+   /** Name of the user that created the event */
+  creator?: string
 }
 
 /**
@@ -56,6 +58,8 @@ export interface ClubRecord {
   members?: string[]
   /** Array of event identifiers hosted by this club (optional) */
   events?: string[]
+   /** Name of the user that created the club */
+  creator?: string
 }
 
 /**

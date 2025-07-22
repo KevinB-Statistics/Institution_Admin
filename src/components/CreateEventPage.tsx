@@ -5,6 +5,7 @@ import { useForm, Controller, useWatch } from "react-hook-form"
 import { GoogleMap, Marker, Autocomplete, useLoadScript } from "@react-google-maps/api"
 import { rrulestr, RRule, Weekday } from "rrule"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
+import useCurrentUser from "@/hooks/useCurrentUser"
 
 // Domain constants. In a production system these would come from the server.
 const CATEGORIES = ["Social", "Academic", "Sports", "Cultural", "Other"] as const
@@ -46,6 +47,7 @@ export default function ImprovedCreateEventPage() {
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null)
   const [step, setStep] = useState(1)
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
+  const user = useCurrentUser()
 
   // Initialize React Hook Form. Provide sensible defaults for new fields.
   const {
@@ -129,6 +131,7 @@ export default function ImprovedCreateEventPage() {
   const onSubmit = async (data: FormValues) => {
     const rruleString = buildRecurrenceRule(data)
     const payload = { ...data, rrule: rruleString, timezone: tz }
+    const payload = { ...data, rrule: rruleString, timezone: tz, creator: user?.name }
     await fetch('/api/events', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

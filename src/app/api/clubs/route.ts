@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
       description: data.description as string,
       members: data.members as string[] | undefined,
       events: data.events as string[] | undefined,
+      creator: data.creator ?? 'Unknown',
     }
     const newClub = await createClub(payload)
     return NextResponse.json(newClub, { status: 201 })
