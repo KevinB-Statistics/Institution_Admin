@@ -9,26 +9,27 @@ import type { EventRecord } from "@/lib/types";
 type View = "week" | "month" | "year";
 
 export default function CalendarView({ events }: { events: EventRecord[] }) {
+  const approved = useMemo(() => events.filter(e => e.status === 'approved'), [events])
   const [view, setView] = useState<View>("month");
   const [current, setCurrent] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const eventsByDate = useMemo(
     () =>
-      events.reduce<Record<string, EventRecord[]>>((acc, ev) => {
-        acc[ev.date] = acc[ev.date] ? [...acc[ev.date], ev] : [ev];
-        return acc;
+      approved.reduce<Record<string, EventRecord[]>>((acc, ev) => {
+        acc[ev.date] = acc[ev.date] ? [...acc[ev.date], ev] : [ev]
+        return acc
       }, {}),
-    [events]
-  );
+    [approved]
+  )
   const eventsByMonth = useMemo(() => {
-    return events.reduce<Record<string, number>>((acc, ev) => {
+    return approved.reduce<Record<string, number>>((acc, ev) => {
       const d = new Date(ev.date)
       const key = `${d.getFullYear()}-${d.getMonth()}`
       acc[key] = (acc[key] || 0) + 1
       return acc
     }, {})
-  }, [events])
+  }, [approved])
 
   const formatMonthYear = (d: Date) =>
     d.toLocaleDateString(undefined, { month: "long", year: "numeric" });

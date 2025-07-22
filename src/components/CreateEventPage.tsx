@@ -46,6 +46,7 @@ export default function ImprovedCreateEventPage() {
 
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null)
   const [step, setStep] = useState(1)
+  const [submitting, setSubmitting] = useState(false)
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
   const user = useCurrentUser()
 
@@ -129,21 +130,29 @@ export default function ImprovedCreateEventPage() {
 
    // Submission handler: persist the new event via the API then clear draft
   const onSubmit = async (data: FormValues) => {
-    const rruleString = buildRecurrenceRule(data)
-    const payload = {
-      ...data,
-      rrule: rruleString,
-      timezone: tz,
-      creator: user?.name,
-      status: user?.role === 'admin' ? 'approved' : 'pending',
+    if (submitting) return
+    setSubmitting(true)
+    try {
+      const rruleString = buildRecurrenceRule(data)
+      const payload = {
+        ...data,
+        rrule: rruleString,
+        timezone: tz,
+        creator: user?.name,
+        status: user?.role === 'admin' ? 'approved' : 'pending',
+      }
+      await fetch('/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      localStorage.removeItem(LS_KEY)
+      alert('Event saved')
+      reset()
+      setStep(1)
+    } finally {
+      setSubmitting(false)
     }
-    await fetch('/api/events', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    localStorage.removeItem(LS_KEY)
-     alert('Event saved')
   }
 
   // Determine which fields are still missing when on the review step
@@ -510,7 +519,7 @@ export default function ImprovedCreateEventPage() {
         <button
           type={step < 4 ? "button" : "submit"}
           onClick={step < 4 ? () => setStep((s) => Math.min(s + 1, 4)) : undefined}
-          disabled={!isValid && step < 4}
+           disabled={(step < 4 && !isValid) || submitting}
           className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
         >
           {step < 4 ? (

@@ -168,11 +168,18 @@ function CardView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: Event
             {e.title}
           </h2>
           <p className="text-sm text-gray-500 mb-2">
-            {new Date(e.date).toLocaleDateString(undefined, {
+            {new Date(e.start ?? e.date).toLocaleDateString(undefined, {
               month: "short",
               day: "numeric",
               year: "numeric",
             })}
+            {e.start && (
+              <>
+                {" "}
+                {new Date(e.start).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
+                {e.end && ` - ${new Date(e.end).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`}
+              </>
+            )}
           </p>
           <span
             className={`
@@ -225,7 +232,12 @@ function ListView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: Event
             <tr key={e.id} className="hover:bg-gray-50">
               <td className="px-4 py-2">{e.title}</td>
               <td className="px-4 py-2">
-                {new Date(e.date).toLocaleDateString()}
+                {new Date(e.start ?? e.date).toLocaleDateString()}
+                {e.start && (
+                  <> {new Date(e.start).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                    {e.end && ` - ${new Date(e.end).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}`}
+                  </>
+                )}
               </td>
               <td className="px-4 py-2 capitalize">{e.status}</td>
               <td className="px-4 py-2">{e.organizer}</td>
@@ -254,7 +266,12 @@ function CompactView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: Ev
           <div className="flex-1">
             <p className="font-medium truncate">{e.title}</p>
             <p className="text-xs text-gray-500">
-              {new Date(e.date).toLocaleDateString()}
+              {new Date(e.start ?? e.date).toLocaleDateString()}
+              {e.start && (
+                <> {new Date(e.start).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                  {e.end && ` - ${new Date(e.end).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}`}
+                </>
+              )}
             </p>
           </div>
           <button onClick={() => onEdit(e)} className="text-blue-600 hover:underline text-sm">

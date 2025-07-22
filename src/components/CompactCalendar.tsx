@@ -4,18 +4,18 @@ import { useEffect, useState } from "react"
 import type { EventRecord } from "@/lib/types"
 
 export default function CompactCalendar({ events }: { events?: EventRecord[] }) {
-  const [data, setData] = useState<EventRecord[]>(events || [])
+  const [data, setData] = useState<EventRecord[]>(events?.filter(e => e.status === 'approved') || [])
 
   useEffect(() => {
     if (!events) {
       fetch("/api/events")
         .then((res) => res.json())
-        .then(setData)
+        .then((all: EventRecord[]) => setData(all.filter(e => e.status === 'approved')))
     }
   }, [events])
 
   const upcoming = [...data]
-    .filter(e => new Date(e.date) >= new Date())
+    .filter(e => e.status === 'approved' && new Date(e.date) >= new Date())
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .slice(0, 3)
 
