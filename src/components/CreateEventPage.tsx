@@ -130,8 +130,13 @@ export default function ImprovedCreateEventPage() {
    // Submission handler: persist the new event via the API then clear draft
   const onSubmit = async (data: FormValues) => {
     const rruleString = buildRecurrenceRule(data)
-    const payload = { ...data, rrule: rruleString, timezone: tz }
-    const payload = { ...data, rrule: rruleString, timezone: tz, creator: user?.name }
+    const payload = {
+      ...data,
+      rrule: rruleString,
+      timezone: tz,
+      creator: user?.name,
+      status: user?.role === 'admin' ? 'approved' : 'pending',
+    }
     await fetch('/api/events', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

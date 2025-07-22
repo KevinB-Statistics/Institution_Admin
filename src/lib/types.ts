@@ -78,6 +78,8 @@ export interface UserRecord {
   email: string
   /** Plain text password (placeholder for now) */
   password: string
+  /** Role of the user within the institution */
+  role: 'admin' | 'student' | 'faculty'
   /** Short biography or description */
   bio?: string
   /** URL for the user's profile picture */

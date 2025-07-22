@@ -1,7 +1,7 @@
 import { Metadata } from "next"
-import Link from "next/link"
 import { listPendingEvents } from "@/lib/adminApi"
 import type { EventRecord } from "@/lib/types"
+import EventApprovalButtons from '@/components/EventApprovalButtons'
 
 export const metadata: Metadata = {
   title: "Pending Events – Institution Admin",
@@ -30,9 +30,7 @@ export default async function PendingEventsPage() {
                 <td className="px-4 py-2 text-sm">{new Date(e.date).toLocaleDateString()}</td>
                 <td className="px-4 py-2 text-sm">{e.organizer}</td>
                 <td className="px-4 py-2 text-sm">
-                  <Link href={`/admin/events/${e.id}/review`} className="text-blue-600 hover:underline">
-                    Review
-                  </Link>
+                  <EventApprovalButtons eventId={e.id} />
                 </td>
               </tr>
             ))}

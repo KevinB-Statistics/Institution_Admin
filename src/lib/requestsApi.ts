@@ -77,6 +77,7 @@ export async function updateRequest(
         name: requests[index].fullName,
         email: requests[index].adminEmail,
         password: '',
+        role: 'admin',
         bio: '',
         avatarUrl: ''
       })

@@ -5,6 +5,7 @@
     "name": "Alice Johnson",
     "email": "alice@example.edu",
     "password": "",
+    "role": "student",
     "bio": "Coordinator for student clubs and activities.",
     "avatarUrl": "/vercel.svg"
   },
@@ -14,15 +15,17 @@
     "name": "Bob Smith",
     "email": "bob@example.edu",
     "password": "",
+    "role": "student",
     "bio": "Graduate assistant in the events office.",
     "avatarUrl": "/vercel.svg"
   },
   {
     "id": "1753145873529",
-    "institution": "University of Idaho",
+    "institution": "Example University",
     "name": "Kevin Bui",
     "email": "kbui@uidaho.edu",
     "password": "",
+    "role": "admin",
     "bio": "Grad Student",
     "avatarUrl": "/vercel.svg"
   }
