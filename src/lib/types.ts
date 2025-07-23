@@ -42,6 +42,12 @@ export interface EventRecord {
   timezone?: string
    /** Name of the user that created the event */
   creator?: string
+   /** Optional URL for an event image */
+  imageUrl?: string
+  /** Number of user reports indicating potential issues */
+  reportCount?: number
+  /** Whether this event was flagged as potentially inappropriate */
+  flagged?: boolean
 }
 
 /**
@@ -106,4 +112,25 @@ export interface RequestRecord {
   facultyDomain: string
   /** Current moderation status for the request */
   status: 'pending' | 'approved' | 'declined'
+}
+
+/**
+ * Represents a user comment left on an event. Comments can be reported
+ * by other users or automatically flagged by simple heuristics.
+ */
+export interface CommentRecord {
+  /** Unique identifier for the comment */
+  id: string
+  /** The event this comment relates to */
+  eventId: string
+  /** Name of the commenting user */
+  author: string
+  /** Body text of the comment */
+  text: string
+  /** Moderation state */
+  status: 'approved' | 'pending' | 'rejected'
+  /** Number of user reports */
+  reportCount?: number
+  /** Flagged automatically as potentially inappropriate */
+  flagged?: boolean
 }

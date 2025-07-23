@@ -3,6 +3,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { listAllEvents, createEvent } from '@/lib/adminApi'
 
+function isInappropriate(text: string): boolean {
+  return /poop|badword/i.test(text)
+}
+
 /**
  * API handler for `/api/events`.
  *
@@ -53,6 +57,9 @@ export async function POST(request: NextRequest) {
       rrule: data.rrule,
       timezone: data.timezone,
       creator: data.creator ?? 'Unknown',
+      imageUrl: data.imageUrl,
+      reportCount: 0,
+      flagged: isInappropriate(data.description || ''),
     }
     const newEvent = await createEvent(payload as any)
     return NextResponse.json(newEvent, { status: 201 })

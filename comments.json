@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "eventId": "1752947358492",
+    "author": "Bob Smith",
+    "text": "Looking forward to this!",
+    "status": "approved",
+    "reportCount": 0,
+    "flagged": false
+  },
+  {
+    "id": "2",
+    "eventId": "1752947358492",
+    "author": "Alice Johnson",
+    "text": "poop",
+    "status": "pending",
+    "reportCount": 1,
+    "flagged": true
+  }
+]

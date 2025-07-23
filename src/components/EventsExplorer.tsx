@@ -195,13 +195,21 @@ function CardView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: Event
           {e.creator && (
             <p className="mt-1 text-xs text-gray-500">Created by {e.creator}</p>
           )}
-          <button
-            onClick={() => onEdit(e)}
-            className="absolute top-6 right-6 text-blue-600 hover:text-blue-800 transition"
-            aria-label={`Edit ${e.title}`}
-          >
-            ✎
-          </button>
+          <div className="absolute top-6 right-6 space-x-2">
+            <button
+              onClick={() => onEdit(e)}
+              className="text-blue-600 hover:text-blue-800 transition"
+              aria-label={`Edit ${e.title}`}
+            >
+              ✎
+            </button>
+            <button
+              onClick={() => fetch(`/api/events/${e.id}/report`, { method: 'POST' })}
+              className="text-red-600 hover:text-red-800 transition text-sm"
+            >
+              Report
+            </button>
+          </div>
         </div>
       ))}
       {events.length === 0 && (
@@ -225,6 +233,7 @@ function ListView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: Event
             <th className="px-4 py-2 text-left font-medium">Organizer</th>
             <th className="px-4 py-2 text-left font-medium">Creator</th>
             <th className="px-4 py-2 text-left font-medium">Edit</th>
+            <th className="px-4 py-2 text-left font-medium">Report</th>
           </tr>
         </thead>
         <tbody className="divide-y bg-white">
@@ -247,6 +256,11 @@ function ListView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: Event
                   Edit
                 </button>
               </td>
+              <td className="px-4 py-2">
+                <button onClick={() => fetch(`/api/events/${e.id}/report`, { method: 'POST' })} className="text-red-600 hover:underline">
+                  Report
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -263,9 +277,9 @@ function CompactView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: Ev
           key={e.id}
           className="flex items-center justify-between bg-white rounded-lg p-3 shadow hover:bg-gray-50 transition"
         >
-          <div className="flex-1">
-            <p className="font-medium truncate">{e.title}</p>
-            <p className="text-xs text-gray-500">
+        <div className="flex-1">
+        <p className="font-medium truncate">{e.title}</p>
+        <p className="text-xs text-gray-500">
               {new Date(e.start ?? e.date).toLocaleDateString()}
               {e.start && (
                 <> {new Date(e.start).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
@@ -273,10 +287,15 @@ function CompactView({ events, onEdit }: { events: EventRecord[]; onEdit: (e: Ev
                 </>
               )}
             </p>
-          </div>
-          <button onClick={() => onEdit(e)} className="text-blue-600 hover:underline text-sm">
-            Edit
-          </button>
+      </div>
+      <div className="flex gap-2">
+        <button onClick={() => onEdit(e)} className="text-blue-600 hover:underline text-sm">
+          Edit
+        </button>
+        <button onClick={() => fetch(`/api/events/${e.id}/report`, { method: 'POST' })} className="text-red-600 hover:underline text-sm">
+          Report
+        </button>
+      </div>
         </li>
       ))}
       {events.length === 0 && (

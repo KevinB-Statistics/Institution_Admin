@@ -57,6 +57,12 @@ export async function listPendingEvents(): Promise<EventRecord[]> {
   return events.filter((e) => e.status === 'pending')
 }
 
+/** List events that have been flagged by the AI or users. */
+export async function listFlaggedEvents(): Promise<EventRecord[]> {
+  const events = await readEvents()
+  return events.filter(e => e.flagged)
+}
+
 /**
  * List template events only.
  */

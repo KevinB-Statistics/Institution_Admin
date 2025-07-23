@@ -4,29 +4,6 @@
     "title": "Gerlad's Birthday",
     "description": "25th Birthday!",
     "date": "2025-07-19",
-    "status": "approved",
-    "organizer": "Unknown",
-    "category": "Social",
-    "tags": [
-      "Fun"
-    ],
-    "visibility": "Everyone",
-    "selectedClub": "",
-    "selectedGroup": "",
-    "location": {
-      "lat": 43.65326090000001,
-      "lng": -116.6754816
-    },
-    "start": "2025-07-19T20:00",
-    "end": "2025-07-19T21:00",
-    "timezone": "America/Boise",
-    "creator": "Alice Johnson"
-  },
-  {
-    "id": "1752947361910",
-    "title": "Gerlad's Birthday",
-    "description": "25th Birthday!",
-    "date": "2025-07-23",
     "status": "pending",
     "organizer": "Unknown",
     "category": "Social",
@@ -44,13 +21,40 @@
     "end": "2025-07-19T21:00",
     "timezone": "America/Boise",
     "creator": "Alice Johnson"
+    ,"reportCount": 0
+    ,"flagged": false
+  },
+  {
+    "id": "1752947361910",
+    "title": "Gerlad's Birthday",
+    "description": "25th Birthday!",
+    "date": "2025-07-19",
+    "status": "pending",
+    "organizer": "Unknown",
+    "category": "Social",
+    "tags": [
+      "Fun"
+    ],
+    "visibility": "Everyone",
+    "selectedClub": "",
+    "selectedGroup": "",
+    "location": {
+      "lat": 43.65326090000001,
+      "lng": -116.6754816
+    },
+    "start": "2025-07-19T20:00",
+    "end": "2025-07-19T21:00",
+    "timezone": "America/Boise",
+    "creator": "Bob Smith"
+    ,"reportCount": 0
+    ,"flagged": false
   },
   {
     "id": "1752948152737",
     "title": "Skibidi Day",
     "description": "Gerald is skibid",
     "date": "2025-07-21",
-    "status": "approved",
+    "status": "pending",
     "organizer": "Unknown",
     "category": "Cultural",
     "tags": [
@@ -66,6 +70,8 @@
     "start": "2025-07-21T12:00",
     "end": "2025-07-21T22:00",
     "timezone": "America/Boise",
-    "creator": "Alice Johnson"
+    "creator": "Alice Johnson",
+    "reportCount": 1,
+    "flagged": true
   }
 ]
