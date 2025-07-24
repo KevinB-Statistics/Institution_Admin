@@ -3,7 +3,7 @@
 "use client"
 
 import type { FC } from 'react'
-import type { ClubRecord } from '@/lib/clubsApi'
+import type { ClubRecord } from '@/lib/types'
 
 interface Props {
    clubs: ClubRecord[]
