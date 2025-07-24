@@ -28,15 +28,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen flex-col`}
       >
-        <header className="border-b p-4 flex justify-between items-center">
-          <a href="/" className="font-bold">
-            OverYonder
-          </a>
-          <WorkspaceSwitcher />
-        </header>
         <main className="flex-1 flex flex-col">
           {children}
         </main>
+         <WorkspaceSwitcher />
       </body>
     </html>
   );
