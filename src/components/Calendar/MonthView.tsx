@@ -10,10 +10,13 @@ import {
   addDays,
   isSameMonth,
 } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { Event } from './CalendarView';
 
 export interface MonthViewProps {
   events: Event[];
+  month: Date;
+  timezone: string;
   onSelectEvent?: (id: string) => void;
 }
 
@@ -25,9 +28,8 @@ const CATEGORY_COLORS: Record<string, string> = {
   Default: '#3b82f6',
 };
 
-export default function MonthView({ events, onSelectEvent }: MonthViewProps) {
-  const today = new Date();
-  const monthStart = startOfMonth(today);
+export default function MonthView({ events, month, timezone, onSelectEvent }: MonthViewProps) {
+  const monthStart = startOfMonth(month);
   const monthEnd = endOfMonth(monthStart);
   const calendarStart = startOfWeek(monthStart, { weekStartsOn: 1 }); // Monday
   const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 1 });
@@ -79,7 +81,7 @@ export default function MonthView({ events, onSelectEvent }: MonthViewProps) {
           >
             {/* Day number */}
             <div className="absolute top-1 right-1 text-xs text-gray-500">
-              {format(day, 'd')}
+              {formatInTimeZone(day, timezone, 'd')}
             </div>
 
             {/* Events list (up to 3) */}
@@ -89,16 +91,17 @@ export default function MonthView({ events, onSelectEvent }: MonthViewProps) {
                   key={ev.id}
                   className="flex items-center text-xs truncate cursor-pointer"
                   onClick={() => onSelectEvent?.(ev.id)}
-                  title={`${ev.title} (${format(new Date(ev.start), 'HH:mm')} - ${format(
+                  title={`${ev.title} (${formatInTimeZone(new Date(ev.start), timezone, 'HH:mm')} - ${formatInTimeZone(
                     new Date(ev.end),
+                    timezone,
                     'HH:mm'
                   )})`}
                 >
                   <span
                     className="inline-block w-2 h-2 rounded-full mr-1 flex-shrink-0"
-                    style={{ backgroundColor: CATEGORY_COLORS[ev.category || 'Default'] }}
+                    style={{ backgroundColor: CATEGORY_COLORS[ev.category || 'Default'], opacity: ev.status === 'pending' ? 0.5 : 1 }}
                   />
-                  <span className="truncate">{ev.title}</span>
+                  <span className={`truncate ${ev.status === 'pending' ? 'opacity-50' : ''}`}>{ev.title}</span>
                 </div>
               ))}
               {dayEvents.length > 3 && (

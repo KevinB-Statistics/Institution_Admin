@@ -2,12 +2,15 @@
 
 import React, { useMemo } from 'react';
 import { differenceInMinutes } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { Event } from './CalendarView';
 import { computeDayPositions, type DayPosition } from './OverlapUtils';
 
 
 export interface DayViewProps {
-  events: Event[];          // All events for the current day
+  events: Event[]; // Events already filtered to the current day
+  date: Date;
+  timezone: string;
   onSelectEvent?: (id: string) => void;
 }
 
@@ -20,7 +23,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   Default: '#3b82f6',
 };
 
-export default function DayView({ events, onSelectEvent }: DayViewProps) {
+export default function DayView({ events, date, timezone, onSelectEvent }: DayViewProps) {
   // Compute overlapping columns for the day events
   const positioned = useMemo<DayPosition[]>(
     () => computeDayPositions(events),
@@ -28,7 +31,11 @@ export default function DayView({ events, onSelectEvent }: DayViewProps) {
   );
 
   return (
-    <div className="flex h-full overflow-hidden">
+    <div className="flex h-full overflow-hidden flex-col">
+      <div className="text-center font-semibold py-1 border-b border-gray-200 bg-white sticky top-0 z-10">
+        {formatInTimeZone(date, timezone, 'EEEE, MMMM d')}
+      </div>
+      <div className="flex flex-1 overflow-hidden">
       {/* Hour labels */}
       <div className="w-12 flex flex-col border-r border-gray-200">
         {Array.from({ length: 24 }).map((_, i) => (
@@ -62,6 +69,7 @@ export default function DayView({ events, onSelectEvent }: DayViewProps) {
           const widthPct = 100 / cols;
           const leftPct = col * widthPct;
           const bg = CATEGORY_COLORS[event.category || 'Default'];
+          const opacity = event.status === 'pending' ? 0.5 : 1;
 
           return (
             <div
@@ -73,6 +81,7 @@ export default function DayView({ events, onSelectEvent }: DayViewProps) {
                 left: `${leftPct}%`,
                 width: `calc(${widthPct}% - 4px)`,
                 backgroundColor: bg,
+                opacity,
               }}
               onClick={() => onSelectEvent?.(event.id)}
               title={`${event.title} (${startDate.getHours()}:${String(startDate.getMinutes()).padStart(2, '0')} - ${endDate.getHours()}:${String(endDate.getMinutes()).padStart(2, '0')})`}
@@ -81,6 +90,7 @@ export default function DayView({ events, onSelectEvent }: DayViewProps) {
             </div>
           );
         })}
+      </div>
       </div>
     </div>
   );
