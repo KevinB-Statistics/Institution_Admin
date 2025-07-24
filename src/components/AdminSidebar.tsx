@@ -4,7 +4,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Menu,
+  ChevronLeft,
+  ChevronRight,
+  LayoutDashboard,
+  CalendarDays,
+  Users,
+  Box,
+  DollarSign,
+  User as SingleUser,
+  Mail,
+  ShieldOff,
+  BarChart2,
+  Settings,
+} from "lucide-react";
 
 interface NavItem {
   label: string;
@@ -12,6 +26,7 @@ interface NavItem {
   sub?: NavItem[];
 }
 
+// Define the primary navigation structure. Sub‑items will be rendered under their parent.
 const NAV: NavItem[] = [
   { label: "Dashboard", href: "/admin" },
   {
@@ -63,6 +78,20 @@ const NAV: NavItem[] = [
   { label: "Settings", href: "/admin/settings" },
 ];
 
+// Map labels to lucide icons for consistent visual language.
+const ICON_MAP: Record<string, any> = {
+  Dashboard: LayoutDashboard,
+  Events: CalendarDays,
+  Clubs: Users,
+  Reservations: Box,
+  Budget: DollarSign,
+  Users: SingleUser,
+  Messaging: Mail,
+  Moderation: ShieldOff,
+  Analytics: BarChart2,
+  Settings: Settings,
+};
+
 export default function AdminSidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [open, setOpen] = useState<Record<string, boolean>>({});
@@ -71,128 +100,92 @@ export default function AdminSidebar() {
   const toggleSection = (label: string) =>
     setOpen((o) => ({ ...o, [label]: !o[label] }));
 
-    return (
+  return (
     <aside
       className={`
-        bg-white border-r shadow-sm min-h
+        bg-white border-r border-gray-200 shadow-sm min-h flex flex-col
         transition-all duration-200 ease-in-out
-        ${collapsed ? "w-14" : "w-56"}
+        ${collapsed ? "w-16" : "w-64"}
       `}
     >
-      {/* collapse/expand: icon left-justified with custom tooltip */}
-      <button
-        onClick={() => setCollapsed((c: boolean) => !c)}
-        className="
-          mb-4 flex items-center justify-start
-          w-full px-2 h-10
-          relative
-          rounded hover:bg-gray-100 focus:outline-none focus:ring
-          group
-        "
-      >
-        <div className="relative w-6 h-6">
-          <ChevronLeft
-            className={`
-              absolute top-0 left-0 w-6 h-6
-              transition-opacity duration-200
-              ${collapsed ? "opacity-0" : "opacity-100"}
-            `}
-          />
-          <Menu
-            className={`
-              absolute top-0 left-0 w-6 h-6
-              transition-opacity duration-200
-              ${collapsed ? "opacity-100" : "opacity-0"}
-            `}
-          />
-        </div>
-        <span
-          className={`
-            absolute left-10 top-1/2 -translate-y-1/2
-            whitespace-nowrap px-2 py-1
-            bg-black text-white text-xs
-            rounded-md
-            opacity-0 group-hover:opacity-100
-            transition-opacity duration-200
-          `}
+      {/* Branding and collapse control */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+        {!collapsed && (
+          <span className="text-xl font-semibold text-gray-900">OverYonder</span>
+        )}
+        <button
+          onClick={() => setCollapsed((c) => !c)}
+          className="p-1 rounded hover:bg-gray-100 focus:outline-none"
+          aria-label="Toggle sidebar"
         >
-          {collapsed ? "Open sidebar" : "Close sidebar"}
-        </span>
-      </button>
+          {collapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+        </button>
+      </div>
 
-      {!collapsed && (
-        <nav className="space-y-1 px-2">
-          {NAV.map((item) => (
+      {/* Navigation */}
+      <nav className="flex-1 space-y-1 px-2 py-4 overflow-y-auto">
+        {NAV.map((item) => {
+          const Icon = ICON_MAP[item.label] || null;
+          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const isSectionOpen = open[item.label];
+
+          return (
             <div key={item.label}>
               {item.sub ? (
                 <button
                   onClick={() => toggleSection(item.label)}
-                  aria-expanded={open[item.label]}
-                  className="
-                    flex items-center justify-between
-                    w-full px-3 py-2
-                    rounded-lg
-                    text-gray-700 hover:bg-gray-100
-                    focus:outline-none focus:bg-gray-100
-                  "
+                  aria-expanded={isSectionOpen}
+                  className={`flex items-center w-full px-3 py-2 rounded-md
+                    ${isActive ? "bg-blue-50 text-blue-700" : "text-gray-700 hover:bg-gray-100"}
+                    focus:outline-none transition-colors`}
                 >
-                  <span
-                    className={`flex-1 text-left ${
-                      pathname.startsWith(item.href)
-                        ? "font-semibold text-gray-900"
-                        : ""
-                    }`}
-                  >
-                    {item.label}
-                  </span>
-                  <ChevronRight
-                    className={`
-                      w-4 h-4
-                      text-gray-500
-                      transition-transform duration-200
-                      ${open[item.label] ? "rotate-90" : ""}
-                    `}
-                  />
+                  {Icon && <Icon className="w-5 h-5" />}
+                  {!collapsed && (
+                    <span className="ml-3 flex-1 text-left font-medium">{item.label}</span>
+                  )}
+                  {!collapsed && (
+                    <ChevronRight
+                      className={`w-4 h-4 ml-auto transition-transform ${isSectionOpen ? "rotate-90" : ""}`}
+                    />
+                  )}
                 </button>
               ) : (
                 <Link
                   href={item.href}
-                  className={`
-                    block px-3 py-2 rounded-lg
-                    text-gray-700 hover:bg-gray-100
-                    ${pathname === item.href
-                      ? "font-semibold bg-blue-50 text-blue-700"
-                      : ""}
-                  `}
+                  className={`flex items-center px-3 py-2 rounded-md
+                    ${isActive ? "bg-blue-50 text-blue-700 font-semibold" : "text-gray-700 hover:bg-gray-100"}
+                    transition-colors`}
+                  title={collapsed ? item.label : undefined}
                 >
-                  {item.label}
+                  {Icon && <Icon className="w-5 h-5" />}
+                  {!collapsed && (
+                    <span className="ml-3">{item.label}</span>
+                  )}
                 </Link>
               )}
-
-              {item.sub && open[item.label] && (
-                <div className="mt-1 space-y-1 pl-6">
-                  {item.sub.map((sub) => (
-                    <Link
-                      key={sub.href}
-                      href={sub.href}
-                      className={`
-                        block px-3 py-1 rounded-lg text-sm
-                        text-gray-600 hover:bg-gray-50
-                        ${pathname === sub.href
-                          ? "font-medium text-blue-700 bg-blue-50"
-                          : ""}
-                      `}
-                    >
-                      {sub.label}
-                    </Link>
-                  ))}
+              {/* Render sub-navigation when expanded and the section is open */}
+              {item.sub && isSectionOpen && !collapsed && (
+                <div className="mt-1 space-y-1 pl-8">
+                  {item.sub.map((sub) => {
+                    const subActive = pathname === sub.href;
+                    return (
+                      <Link
+                        key={sub.href}
+                        href={sub.href}
+                        className={`block text-sm px-3 py-1 rounded-md
+                          ${subActive ? "font-medium bg-blue-50 text-blue-700" : "text-gray-600 hover:bg-gray-50"}
+                          transition-colors`}
+                      >
+                        {sub.label}
+                      </Link>
+                    );
+                  })}
                 </div>
               )}
             </div>
-          ))}
-        </nav>
-      )}
+          );
+        })}
+      </nav>
     </aside>
   );
 }
-

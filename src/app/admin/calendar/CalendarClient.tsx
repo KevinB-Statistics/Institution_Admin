@@ -98,14 +98,14 @@ export default function CalendarClient({ events }: { events: EventRecord[] }) {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Top header with search, view toggles, navigation and actions */}
-      <div className="mb-4 flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4">
+    <div className="flex flex-col h-full bg-gray-50 p-4">
+      {/* Header section: search, view toggles, navigation and actions */}
+      <div className="mb-4 rounded-lg border bg-white shadow-sm p-4 flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4">
         {/* Search input */}
         <input
           type="search"
           placeholder="Search for anything"
-          className="flex-1 rounded border px-3 py-2 text-sm placeholder-gray-400"
+          className="flex-1 rounded border px-3 py-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
         {/* View toggles */}
         <div className="inline-flex overflow-hidden rounded border bg-white">
@@ -150,12 +150,12 @@ export default function CalendarClient({ events }: { events: EventRecord[] }) {
           </button>
         </div>
         {/* Label showing the current range */}
-        <span className="text-sm font-medium">{label}</span>
+        <span className="text-sm font-medium whitespace-nowrap">{label}</span>
         {/* Time zone selector */}
         <select
           value={timeZone}
           onChange={(e) => setTimeZone(e.target.value)}
-          className="rounded border px-2 py-2 text-sm"
+          className="rounded border px-2 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
         >
           {zones.map((z) => (
             <option key={z} value={z}>
@@ -172,17 +172,10 @@ export default function CalendarClient({ events }: { events: EventRecord[] }) {
           Add Event
         </button>
       </div>
-      {/* Main layout: vertical nav, sidebar, and calendar view */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Vertical navigation icons */}
-        <div className="hidden sm:flex flex-col items-center space-y-6 py-4 px-2 border-r bg-gray-50">
-          <CalendarIcon className="w-5 h-5 text-gray-500 hover:text-blue-600 cursor-pointer" />
-          <ListIcon className="w-5 h-5 text-gray-500 hover:text-blue-600 cursor-pointer" />
-          <UsersIcon className="w-5 h-5 text-gray-500 hover:text-blue-600 cursor-pointer" />
-          <SettingsIcon className="w-5 h-5 text-gray-500 hover:text-blue-600 cursor-pointer" />
-        </div>
+      {/* Main layout: sidebar and calendar view */}
+      <div className="flex flex-1 overflow-hidden rounded-lg border bg-white shadow-sm">
         {/* Sidebar with mini calendar and categories */}
-        <div className="w-64 hidden md:block border-r bg-white p-4 overflow-y-auto">
+        <div className="w-72 hidden md:block border-r p-4 overflow-y-auto">
           <MiniMonthView
             date={miniMonth}
             selected={current}
@@ -190,7 +183,17 @@ export default function CalendarClient({ events }: { events: EventRecord[] }) {
             onSelect={(d) => setCurrent(d)}
           />
           <div className="mt-6">
-            <h3 className="mb-2 text-sm font-semibold text-gray-700">My Calendars</h3>
+            <div className="mb-2 flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-gray-700">My Calendars</h3>
+              {/* Placeholder for add calendar button */}
+              <button
+                type="button"
+                className="p-1 rounded hover:bg-gray-100"
+                aria-label="Add calendar"
+              >
+                +
+              </button>
+            </div>
             <CategoryList
               items={[
                 { label: "Social", color: "#38bdf8" },
@@ -198,11 +201,12 @@ export default function CalendarClient({ events }: { events: EventRecord[] }) {
                 { label: "Sports", color: "#34d399" },
                 { label: "Cultural", color: "#fbbf24" },
               ]}
+              showCheckbox
             />
           </div>
         </div>
         {/* Main calendar view */}
-        <div className="flex-1 overflow-auto bg-white p-2">
+        <div className="flex-1 overflow-auto p-2">
           <CalendarView view={view} events={filtered} date={current} timeZone={timeZone} />
         </div>
       </div>

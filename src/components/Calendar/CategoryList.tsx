@@ -19,15 +19,29 @@ export interface CategoryItem {
 
 export interface CategoryListProps {
   items: CategoryItem[];
+  /**
+   * When set to true a checkbox will appear before each category label.  This
+   * mirrors the interactive checkbox list seen in the inspiration designs
+   * where users can toggle individual calendars on or off.  The checkboxes
+   * are uncontrolled – they are checked by default but do not persist state.
+   */
+  showCheckbox?: boolean;
 }
 
-export default function CategoryList({ items }: CategoryListProps) {
+export default function CategoryList({ items, showCheckbox = false }: CategoryListProps) {
   return (
     <ul className="space-y-2">
       {items.map((item) => (
-        <li key={item.label} className="flex items-center">
+        <li key={item.label} className="flex items-center space-x-2">
+          {showCheckbox && (
+            <input
+              type="checkbox"
+              defaultChecked
+              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+          )}
           <span
-            className="inline-block w-2 h-2 rounded-full mr-2"
+            className="inline-block w-2 h-2 rounded-full"
             style={{ backgroundColor: item.color }}
           />
           <span className="text-sm text-gray-700">{item.label}</span>

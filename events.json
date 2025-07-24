@@ -3,7 +3,7 @@
     "id": "1752947358492",
     "title": "Gerlad's Birthday",
     "description": "25th Birthday!",
-    "date": "2025-07-19",
+    "date": "2025-07-24",
     "status": "pending",
     "organizer": "Unknown",
     "category": "Social",
@@ -20,15 +20,15 @@
     "start": "2025-07-19T20:00",
     "end": "2025-07-19T21:00",
     "timezone": "America/Boise",
-    "creator": "Alice Johnson"
-    ,"reportCount": 0
-    ,"flagged": false
+    "creator": "Alice Johnson",
+    "reportCount": 0,
+    "flagged": false
   },
   {
     "id": "1752947361910",
     "title": "Gerlad's Birthday",
     "description": "25th Birthday!",
-    "date": "2025-07-19",
+    "date": "2025-07-24",
     "status": "pending",
     "organizer": "Unknown",
     "category": "Social",
@@ -45,15 +45,15 @@
     "start": "2025-07-19T20:00",
     "end": "2025-07-19T21:00",
     "timezone": "America/Boise",
-    "creator": "Bob Smith"
-    ,"reportCount": 0
-    ,"flagged": false
+    "creator": "Bob Smith",
+    "reportCount": 0,
+    "flagged": false
   },
   {
     "id": "1752948152737",
     "title": "Skibidi Day",
     "description": "Gerald is skibid",
-    "date": "2025-07-21",
+    "date": "2025-07-24",
     "status": "pending",
     "organizer": "Unknown",
     "category": "Cultural",

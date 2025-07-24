@@ -106,9 +106,16 @@ export default function MiniMonthView({
             "text-xs h-6 w-6 flex items-center justify-center rounded-full";
           className += inCurrentMonth ? " text-gray-700" : " text-gray-400";
           if (isSelected) {
+            // When the day is currently selected fill it with the primary colour and
+            // invert the text.  This creates a clear focal point in the mini
+            // calendar.
             className += " bg-blue-600 text-white";
           } else if (isToday) {
-            className += " bg-gray-200";
+            // Highlight today with a subtle border instead of a solid fill to
+            // maintain a light, airy feel.  The text colour is tinted blue to
+            // differentiate it from other dates without drawing too much
+            // attention.
+            className += " border border-blue-600 text-blue-600";
           }
           return (
             <div key={idx} className="flex items-center justify-center">
