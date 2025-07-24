@@ -2,7 +2,6 @@
 
 import React, { useMemo } from 'react';
 import {
-  format,
   startOfMonth,
   endOfMonth,
   startOfWeek,
@@ -10,6 +9,7 @@ import {
   addDays,
   isSameMonth,
 } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { Event } from './CalendarView';
 
 export interface MonthViewProps {
@@ -48,7 +48,7 @@ export default function MonthView({ events, date, timeZone, onSelectEvent }: Mon
   const eventsMap = useMemo(() => {
     const map = new Map<string, Event[]>();
     events.forEach((e) => {
-      const key = format(new Date(e.start), 'yyyy-MM-dd');
+      const key = formatInTimeZone(new Date(e.start), timeZone, 'yyyy-MM-dd');
       const list = map.get(key) || [];
       list.push(e);
       map.set(key, list);
@@ -67,7 +67,7 @@ export default function MonthView({ events, date, timeZone, onSelectEvent }: Mon
 
       {/* Date cells */}
       {calendarDays.map((day) => {
-        const dayKey = format(day, 'yyyy-MM-dd');
+        const dayKey = formatInTimeZone(day, timeZone, 'yyyy-MM-dd');
         const dayEvents = eventsMap.get(dayKey) || [];
         const inMonth = isSameMonth(day, monthStart);
 
@@ -80,7 +80,7 @@ export default function MonthView({ events, date, timeZone, onSelectEvent }: Mon
           >
             {/* Day number */}
             <div className="absolute top-1 right-1 text-xs text-gray-500">
-              {format(day, 'd', { timeZone })}
+              {formatInTimeZone(day, timeZone, 'd')}
             </div>
 
             {/* Events list (up to 3) */}
@@ -90,10 +90,10 @@ export default function MonthView({ events, date, timeZone, onSelectEvent }: Mon
                   key={ev.id}
                   className={`flex items-center text-xs truncate cursor-pointer ${ev.status !== 'approved' ? 'opacity-60' : ''}`}
                   onClick={() => onSelectEvent?.(ev.id)}
-                  title={`${ev.title} (${format(new Date(ev.start), 'HH:mm', { timeZone })} - ${format(
+                  title={`${ev.title} (${formatInTimeZone(new Date(ev.start), timeZone, 'HH:mm')} - ${formatInTimeZone(
                     new Date(ev.end),
-                    'HH:mm',
-                    { timeZone }
+                    timeZone,
+                    'HH:mm'
                   )})`}
                 >
                   <span

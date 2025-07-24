@@ -1,13 +1,14 @@
 "use client"
 
 import React, { useMemo } from 'react';
-import { differenceInMinutes, format } from 'date-fns';
+import { differenceInMinutes } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { Event } from './CalendarView';
 import { computeDayPositions, type DayPosition } from './OverlapUtils';
 
 
 export interface DayViewProps {
-  eevents: Event[];          // Events already filtered for this day
+  events: Event[];          // Events already filtered for this day
   date: Date;
   timeZone: string;
   onSelectEvent?: (id: string) => void;
@@ -32,7 +33,7 @@ export default function DayView({ events, date, timeZone, onSelectEvent }: DayVi
   return (
     <div className="flex h-full overflow-hidden flex-col">
       <div className="px-2 py-1 text-center font-semibold border-b">
-        {format(date, 'EEEE, MMMM d, yyyy', { timeZone })}
+        {formatInTimeZone(date, timeZone, 'EEEE, MMMM d, yyyy')}
       </div>
       <div className="flex-1 flex overflow-hidden">
       {/* Hour labels */}

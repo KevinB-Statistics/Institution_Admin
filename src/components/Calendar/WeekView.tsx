@@ -1,7 +1,8 @@
 "use client"
 
 import React, { useMemo } from 'react';
-import { differenceInMinutes, format, startOfWeek, addDays } from 'date-fns';
+import { differenceInMinutes, startOfWeek, addDays } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { Event } from './CalendarView';
 import { computeWeekPositions, type WeekPosition } from './OverlapUtils';
 
@@ -35,7 +36,7 @@ export default function WeekView({ events, date, timeZone, onSelectEvent }: Week
   return (
     <div className="flex h-full overflow-hidden flex-col">
       <div className="flex justify-between px-2 py-1 border-b text-sm font-semibold">
-        {format(weekStart, 'MMM d', { timeZone })} – {format(addDays(weekStart, 6), 'MMM d, yyyy', { timeZone })}
+        {formatInTimeZone(weekStart, timeZone, 'MMM d')} – {formatInTimeZone(addDays(weekStart, 6), timeZone, 'MMM d, yyyy')}
       </div>
       <div className="flex-1 flex overflow-hidden">
       {/* Hour labels */}
@@ -55,7 +56,7 @@ export default function WeekView({ events, date, timeZone, onSelectEvent }: Week
         {/* Day names */}
         {days.map((d, i) => (
           <div key={i} className="absolute top-0 text-xs text-center font-medium" style={{ left: `${(i / 7) * 100}%`, width: `${100 / 7}%` }}>
-            {format(d, 'EEE d', { timeZone })}
+             {formatInTimeZone(d, timeZone, 'EEE d')}
           </div>
         ))}
         {/* Half-hour grid lines */}
