@@ -81,7 +81,7 @@ export default function AdminSidebar() {
     >
       {/* collapse/expand: icon left-justified with custom tooltip */}
       <button
-        onClick={() => setCollapsed((c) => !c)}
+        onClick={() => setCollapsed((c: boolean) => !c)}
         className="
           mb-4 flex items-center justify-start
           w-full px-2 h-10

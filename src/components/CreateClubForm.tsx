@@ -5,7 +5,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { ClubRecord } from '@/lib/types'
-import useCurrentUser from '@/components/hooks/useCurrentUser'
+import useCurrentUser from '@/hooks/useCurrentUser'
 
 interface CreateClubFormProps {
   /** Called with the newly created club after a successful save */

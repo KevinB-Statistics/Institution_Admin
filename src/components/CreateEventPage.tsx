@@ -5,7 +5,7 @@ import { useForm, Controller, useWatch } from "react-hook-form"
 import { GoogleMap, Marker, Autocomplete, useLoadScript } from "@react-google-maps/api"
 import { rrulestr, RRule, Weekday } from "rrule"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
-import useCurrentUser from "@/components/hooks/useCurrentUser"
+import useCurrentUser from '@/hooks/useCurrentUser'
 
 // Domain constants. In a production system these would come from the server.
 const CATEGORIES = ["Social", "Academic", "Sports", "Cultural", "Other"] as const
@@ -79,7 +79,7 @@ export default function ImprovedCreateEventPage() {
   })
 
   // Persist intermediate form state to local storage
-  const watched = useWatch({ control })
+  const watched = useWatch<FormValues>({ control })
   useEffect(() => {
     localStorage.setItem(LS_KEY, JSON.stringify(watched))
   }, [watched])
@@ -224,7 +224,7 @@ export default function ImprovedCreateEventPage() {
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={(e) => field.onChange(e.target.files)}
+                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(e.target.files)}
                         className="hidden"
                         id="file-input"
                       />
@@ -280,8 +280,8 @@ export default function ImprovedCreateEventPage() {
                     <div className="flex gap-2">
                       <input
                         value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => (e.key === "Enter" ? (e.preventDefault(), addTag()) : null)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => (e.key === "Enter" ? (e.preventDefault(), addTag()) : null)}
                         className="flex-1 border rounded p-2"
                         placeholder="Add a tag"
                       />
@@ -371,12 +371,12 @@ export default function ImprovedCreateEventPage() {
                   mapContainerStyle={{ width: "100%", height: "240px" }}
                   center={field.value}
                   zoom={17}
-                  onClick={(e) => field.onChange({ lat: e.latLng!.lat(), lng: e.latLng!.lng() })}
+                  onClick={(e: google.maps.MapMouseEvent) => field.onChange({ lat: e.latLng!.lat(), lng: e.latLng!.lng() })}
                 >
                   <Marker
                     position={field.value}
                     draggable
-                    onDragEnd={(e) => field.onChange({ lat: e.latLng!.lat(), lng: e.latLng!.lng() })}
+                    onDragEnd={(e: google.maps.MapMouseEvent) => field.onChange({ lat: e.latLng!.lat(), lng: e.latLng!.lng() })}
                   />
                 </GoogleMap>
               </>
@@ -421,14 +421,14 @@ export default function ImprovedCreateEventPage() {
               <label className="block text-sm mb-1">Repeat on</label>
               <div className="flex flex-wrap gap-2">
                 {WEEK_DAYS.map((code) => {
-                  const checked = watched.weekDays.includes(code)
+                  const checked = (watched.weekDays ?? []).includes(code)
                   return (
                     <label key={code} className="flex items-center gap-1">
                       <input
                         type="checkbox"
                         checked={checked}
-                        onChange={(e) => {
-                          const list = watched.weekDays
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          const list: string[] = watched.weekDays ?? []
                           if (e.target.checked) setValue("weekDays", [...list, code])
                           else setValue("weekDays", list.filter((d) => d !== code))
                         }}

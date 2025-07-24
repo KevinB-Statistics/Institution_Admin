@@ -17,7 +17,7 @@ export default function WorkspaceSwitcher() {
     <select
       className="border rounded p-1 text-sm"
       value={current.path}
-      onChange={(e) => router.push(e.target.value)}
+      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => router.push(e.target.value)}
     >
       {WORKSPACES.map((w) => (
         <option key={w.path} value={w.path}>
