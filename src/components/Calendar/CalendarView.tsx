@@ -12,15 +12,18 @@ export interface Event {
   start: string;
   end: string;
   category?: string;
+  status?: string;
 }
 
 export interface CalendarViewProps {
   events: EventRecord[];
   view: 'day' | 'week' | 'month';
+  date: Date;
+  timeZone: string;
   onSelectEvent?: (id: string) => void;
 }
 
-export default function CalendarView({ events, view, onSelectEvent }: CalendarViewProps) {
+export default function CalendarView({ events, view, date, timeZone, onSelectEvent }: CalendarViewProps) {
   const normalized: Event[] = events
     .filter(e => e.start && e.end)
     .map(e => ({
@@ -29,14 +32,15 @@ export default function CalendarView({ events, view, onSelectEvent }: CalendarVi
       start: e.start as string,
       end: e.end as string,
       category: e.category,
+      status: e.status,
     }));
 
   switch (view) {
     case 'day':
-      return <DayView events={normalized} onSelectEvent={onSelectEvent} />;
+      return <DayView events={normalized} date={date} timeZone={timeZone} onSelectEvent={onSelectEvent} />;
     case 'week':
-      return <WeekView events={normalized} onSelectEvent={onSelectEvent} />;
+      return <WeekView events={normalized} date={date} timeZone={timeZone} onSelectEvent={onSelectEvent} />;
     default:
-      return <MonthView events={normalized} onSelectEvent={onSelectEvent} />;
+      return <MonthView events={normalized} date={date} timeZone={timeZone} onSelectEvent={onSelectEvent} />;
   }
 }

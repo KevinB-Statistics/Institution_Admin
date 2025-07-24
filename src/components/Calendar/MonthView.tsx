@@ -14,6 +14,8 @@ import { Event } from './CalendarView';
 
 export interface MonthViewProps {
   events: Event[];
+  date: Date;
+  timeZone: string;
   onSelectEvent?: (id: string) => void;
 }
 
@@ -25,9 +27,8 @@ const CATEGORY_COLORS: Record<string, string> = {
   Default: '#3b82f6',
 };
 
-export default function MonthView({ events, onSelectEvent }: MonthViewProps) {
-  const today = new Date();
-  const monthStart = startOfMonth(today);
+export default function MonthView({ events, date, timeZone, onSelectEvent }: MonthViewProps) {
+  const monthStart = startOfMonth(date);
   const monthEnd = endOfMonth(monthStart);
   const calendarStart = startOfWeek(monthStart, { weekStartsOn: 1 }); // Monday
   const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 1 });
@@ -79,7 +80,7 @@ export default function MonthView({ events, onSelectEvent }: MonthViewProps) {
           >
             {/* Day number */}
             <div className="absolute top-1 right-1 text-xs text-gray-500">
-              {format(day, 'd')}
+              {format(day, 'd', { timeZone })}
             </div>
 
             {/* Events list (up to 3) */}
@@ -87,16 +88,17 @@ export default function MonthView({ events, onSelectEvent }: MonthViewProps) {
               {dayEvents.slice(0, 3).map((ev) => (
                 <div
                   key={ev.id}
-                  className="flex items-center text-xs truncate cursor-pointer"
+                  className={`flex items-center text-xs truncate cursor-pointer ${ev.status !== 'approved' ? 'opacity-60' : ''}`}
                   onClick={() => onSelectEvent?.(ev.id)}
-                  title={`${ev.title} (${format(new Date(ev.start), 'HH:mm')} - ${format(
+                  title={`${ev.title} (${format(new Date(ev.start), 'HH:mm', { timeZone })} - ${format(
                     new Date(ev.end),
-                    'HH:mm'
+                    'HH:mm',
+                    { timeZone }
                   )})`}
                 >
                   <span
                     className="inline-block w-2 h-2 rounded-full mr-1 flex-shrink-0"
-                    style={{ backgroundColor: CATEGORY_COLORS[ev.category || 'Default'] }}
+                    style={{ backgroundColor: CATEGORY_COLORS[ev.category || 'Default'], opacity: ev.status !== 'approved' ? 0.6 : 1 }}
                   />
                   <span className="truncate">{ev.title}</span>
                 </div>

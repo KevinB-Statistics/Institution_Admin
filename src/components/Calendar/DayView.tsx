@@ -1,13 +1,15 @@
 "use client"
 
 import React, { useMemo } from 'react';
-import { differenceInMinutes } from 'date-fns';
+import { differenceInMinutes, format } from 'date-fns';
 import { Event } from './CalendarView';
 import { computeDayPositions, type DayPosition } from './OverlapUtils';
 
 
 export interface DayViewProps {
-  events: Event[];          // All events for the current day
+  eevents: Event[];          // Events already filtered for this day
+  date: Date;
+  timeZone: string;
   onSelectEvent?: (id: string) => void;
 }
 
@@ -20,7 +22,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   Default: '#3b82f6',
 };
 
-export default function DayView({ events, onSelectEvent }: DayViewProps) {
+export default function DayView({ events, date, timeZone, onSelectEvent }: DayViewProps) {
   // Compute overlapping columns for the day events
   const positioned = useMemo<DayPosition[]>(
     () => computeDayPositions(events),
@@ -28,7 +30,11 @@ export default function DayView({ events, onSelectEvent }: DayViewProps) {
   );
 
   return (
-    <div className="flex h-full overflow-hidden">
+    <div className="flex h-full overflow-hidden flex-col">
+      <div className="px-2 py-1 text-center font-semibold border-b">
+        {format(date, 'EEEE, MMMM d, yyyy', { timeZone })}
+      </div>
+      <div className="flex-1 flex overflow-hidden">
       {/* Hour labels */}
       <div className="w-12 flex flex-col border-r border-gray-200">
         {Array.from({ length: 24 }).map((_, i) => (
@@ -62,11 +68,13 @@ export default function DayView({ events, onSelectEvent }: DayViewProps) {
           const widthPct = 100 / cols;
           const leftPct = col * widthPct;
           const bg = CATEGORY_COLORS[event.category || 'Default'];
+          const pending = event.status !== 'approved';
 
           return (
             <div
               key={event.id}
-              className="absolute rounded text-white text-xs p-1 overflow-hidden cursor-pointer"
+              className={`absolute rounded text-white text-xs p-1 overflow-hidden cursor-pointer ${pending ? 'opacity-60 border border-dashed border-gray-700' : ''}`}
+
               style={{
                 top: (minutesFromMid / 60) * CELL_HEIGHT,
                 height: (durationMin / 60) * CELL_HEIGHT,
@@ -81,6 +89,7 @@ export default function DayView({ events, onSelectEvent }: DayViewProps) {
             </div>
           );
         })}
+      </div>
       </div>
     </div>
   );
