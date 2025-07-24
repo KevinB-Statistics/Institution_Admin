@@ -1,6 +1,9 @@
+"use client"
+
 import React, { useMemo } from 'react';
 import { differenceInMinutes } from 'date-fns';
 import { Event } from './CalendarView';
+import { computeWeekPositions, type WeekPosition } from './OverlapUtils';
 
 const CATEGORY_COLORS: Record<string, string> = {
   Social: '#38bdf8',
@@ -20,54 +23,10 @@ const CELL_HEIGHT = 48; // pixels per hour
 export default function WeekView({ events, onSelectEvent }: WeekViewProps) {
   const now = new Date();
 
-  // Group events by weekday index (Mon=0..Sun=6)
-  const daysMap = useMemo(() => {
-    const map: Record<number, Event[]> = {};
-    events.forEach(e => {
-      const start = new Date(e.start);
-      const day = (start.getDay() + 6) % 7;
-      if (!map[day]) map[day] = [];
-      map[day].push(e);
-    });
-    return map;
-  }, [events]);
-
-  // Compute overlap columns for each event
-  const positioned = useMemo(() => {
-    type Pos = { event: Event; day: number; col: number; cols: number };
-    const result: Pos[] = [];
-    Object.entries(daysMap).forEach(([dayStr, evs]) => {
-      const day = Number(dayStr);
-      // sort by start time
-      const sorted = evs
-        .map(e => ({ e, start: new Date(e.start).getTime(), end: new Date(e.end).getTime() }))
-        .sort((a, b) => a.start - b.start);
-      const groups: Event[][] = [];
-      // partition into overlapping groups
-      sorted.forEach(({ e, start, end }) => {
-        let placed = false;
-        for (const grp of groups) {
-          if (!grp.some(g => {
-            const s = new Date(g.start).getTime();
-            const t = new Date(g.end).getTime();
-            return s < end && t > start;
-          })) {
-            grp.push(e);
-            placed = true;
-            break;
-          }
-        }
-        if (!placed) groups.push([e]);
-      });
-      // assign column index within each group
-      groups.forEach(grp => {
-        grp.forEach((e, idx) => {
-          result.push({ event: e, day, col: idx, cols: grp.length });
-        });
-      });
-    });
-    return result;
-  }, [daysMap]);
+  const positioned = useMemo<WeekPosition[]>(
+    () => computeWeekPositions(events),
+    [events]
+  );
 
   return (
     <div className="flex h-full overflow-hidden">

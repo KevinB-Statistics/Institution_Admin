@@ -1,6 +1,10 @@
+"use client"
+
 import React, { useMemo } from 'react';
 import { differenceInMinutes } from 'date-fns';
 import { Event } from './CalendarView';
+import { computeDayPositions, type DayPosition } from './OverlapUtils';
+
 
 export interface DayViewProps {
   events: Event[];          // All events for the current day
@@ -18,42 +22,10 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function DayView({ events, onSelectEvent }: DayViewProps) {
   // Compute overlapping columns for the day events
-  const positioned = useMemo(() => {
-    type Pos = { event: Event; col: number; cols: number };
-    const result: Pos[] = [];
-    // sort by start time
-    const sorted = events
-      .map(e => ({ e, start: new Date(e.start).getTime(), end: new Date(e.end).getTime() }))
-      .sort((a, b) => a.start - b.start);
-
-    const groups: Event[][] = [];
-    // partition into overlapping groups
-    sorted.forEach(({ e, start, end }) => {
-      let placed = false;
-      for (const grp of groups) {
-        // if no overlap with existing group
-        if (!grp.some(g => {
-          const gs = new Date(g.start).getTime();
-          const ge = new Date(g.end).getTime();
-          return gs < end && ge > start;
-        })) {
-          grp.push(e);
-          placed = true;
-          break;
-        }
-      }
-      if (!placed) groups.push([e]);
-    });
-
-    // assign column index within each group
-    groups.forEach(grp => {
-      grp.forEach((e, idx) => {
-        result.push({ event: e, col: idx, cols: grp.length });
-      });
-    });
-
-    return result;
-  }, [events]);
+  const positioned = useMemo<DayPosition[]>(
+    () => computeDayPositions(events),
+    [events]
+  );
 
   return (
     <div className="flex h-full overflow-hidden">
