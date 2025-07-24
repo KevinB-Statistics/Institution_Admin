@@ -18,6 +18,7 @@ import {
   ShieldOff,
   BarChart2,
   Settings,
+  Sheet,
 } from "lucide-react";
 
 interface NavItem {
@@ -29,6 +30,7 @@ interface NavItem {
 // Define the primary navigation structure. Sub‑items will be rendered under their parent.
 const NAV: NavItem[] = [
   { label: "Dashboard", href: "/admin" },
+  { label: "Calendar", href: "/admin/calendar"},
   {
     label: "Events",
     href: "/admin/events",
@@ -81,7 +83,8 @@ const NAV: NavItem[] = [
 // Map labels to lucide icons for consistent visual language.
 const ICON_MAP: Record<string, any> = {
   Dashboard: LayoutDashboard,
-  Events: CalendarDays,
+  Calendar: CalendarDays,
+  Events: Sheet,
   Clubs: Users,
   Reservations: Box,
   Budget: DollarSign,
