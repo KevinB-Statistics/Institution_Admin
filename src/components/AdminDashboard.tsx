@@ -14,7 +14,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import CompactCalendar from "./CompactCalendar";
+import CompactCalendar from "./Calendar/CompactCalendar";
 import type { EventRecord } from "@/lib/types";
 import { Combobox } from "@headlessui/react";
 import Tippy from "@tippyjs/react";
